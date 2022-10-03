@@ -4,9 +4,17 @@
     <list default="true" id="e4f447a4-c9ee-46ae-b1d4-2f46c0efa2c1" name="Changes" comment="">
       <change afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/Controller/HomeController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/auth/register.html.twig" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/templates/home/index.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/packages/doctrine.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/doctrine.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config/routes.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/routes.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/LoginController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/LoginController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/RegisterController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/RegisterController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/base.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/login/index.html.twig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/register/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/auth/login.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,17 +44,19 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "true",
-    "last_opened_file_path": "C:/Users/48695/PhpstormProjects/symfony-crud/public",
+    "last_opened_file_path": "C:/Users/48695/PhpstormProjects/symfony-crud/templates/auth",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "web-ide.project.structure",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\48695\PhpstormProjects\symfony-crud\templates\auth" />
       <recent name="C:\Users\48695\PhpstormProjects\symfony-crud\public" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\48695\PhpstormProjects\symfony-crud\templates\auth" />
       <recent name="C:\Users\48695\PhpstormProjects\symfony-crud\public\images" />
     </key>
   </component>
@@ -59,7 +69,7 @@
       <option name="presentableId" value="Default" />
       <updated>1664617303054</updated>
       <workItem from="1664617304593" duration="94000" />
-      <workItem from="1664617454144" duration="4622000" />
+      <workItem from="1664617454144" duration="12466000" />
     </task>
     <servers />
   </component>

@@ -1,0 +1,3 @@
+index:
+    path: /{slug}
+    controller: App\Controller\PageController::index
