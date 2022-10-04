@@ -4,7 +4,12 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
+#[
+UniqueEntity('email', message: 'User with this {{ label }} exists.')]
+#[UniqueEntity('username', message: 'This {{ label }} is already taken.')]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User
 {
@@ -13,18 +18,22 @@ class User
     #[ORM\Column]
     private ?int $id = null;
 
+
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $lastname = null;
 
+    #[Assert\NotBlank]
     #[ORM\Column(length: 255, unique: true)]
     private ?string $username = null;
 
+    #[Assert\NotBlank]
     #[ORM\Column(length: 255, unique: true)]
     private ?string $email = null;
 
+    #[Assert\NotBlank]
     #[ORM\Column(length: 255)]
     private ?string $password = null;
 
@@ -33,6 +42,12 @@ class User
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
+
+    public function __construct()
+    {
+        $this->setStatus(false);
+        $this->setCreatedAt(new \DateTimeImmutable());
+    }
 
     public function getId(): ?int
     {

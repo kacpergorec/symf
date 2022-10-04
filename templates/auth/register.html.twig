@@ -3,26 +3,29 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
+
     <div class="container">
-        <form action="" method="POST" class="row g-3 col-6 mx-auto my-5">
+        <div class="row g-3 col-6 mx-auto my-5">
+
             <h1>Register</h1>
 
-            <div class="col-md-6">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" placeholder="elon@spacex.com" name="email">
+            {{ form_start(registerForm) }}
+
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form_row(registerForm.email) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(registerForm.username) }}
+                </div>
+                <div class="col-12">
+                    {{ form_row(registerForm.password) }}
+                </div>
             </div>
-            <div class="col-md-6">
-                <label for="username" class="form-label">Username</label>
-                <input type="text" class="form-control" id="username" placeholder="TheSpaceGuy8000" name="username">
-            </div>
-            <div class="col-12">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" name="password">
-            </div>
-            <div class="col-12 ">
-                <button type="submit" class="btn btn-primary px-5">Sign in</button>
-            </div>
-        </form>
+
+            {{ form_end(registerForm) }}
+
+        </div>
 
     </div>
 {% endblock %}
