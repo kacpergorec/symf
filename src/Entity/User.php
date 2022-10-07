@@ -4,14 +4,15 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
-#[
-UniqueEntity('email', message: 'User with this {{ label }} exists.')]
+#[UniqueEntity('email', message: 'User with this {{ label }} exists.')]
 #[UniqueEntity('username', message: 'This {{ label }} is already taken.')]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User
+
+class User implements PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
