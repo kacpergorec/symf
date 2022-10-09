@@ -20,6 +20,9 @@ security:
             form_login:
                 login_path: app_login
                 check_path: app_login
+            login_throttling:
+                max_attempts: 3
+                interval: '1 minute'
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
