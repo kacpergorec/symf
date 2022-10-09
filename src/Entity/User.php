@@ -5,14 +5,18 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
+
+/**
+ * @method string getUserIdentifier()
+ */
 #[UniqueEntity('email', message: 'User with this {{ label }} exists.')]
 #[UniqueEntity('username', message: 'This {{ label }} is already taken.')]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-
-class User implements PasswordAuthenticatedUserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -39,15 +43,21 @@ class User implements PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column]
+    private array $roles = [];
+
+    #[ORM\Column]
     private ?bool $status = null;
 
+    /**
+     * @var string The hashed password
+     */
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
     public function __construct()
     {
         $this->setStatus(false);
-        $this->setCreatedAt(new \DateTimeImmutable());
+        $this->createdAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -103,7 +113,17 @@ class User implements PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getPassword(): ?string
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): string
     {
         return $this->password;
     }
@@ -132,10 +152,37 @@ class User implements PasswordAuthenticatedUserInterface
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
     {
-        $this->createdAt = $createdAt;
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
 
-        return $this;
+    public function getRoles()
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    /**
+     * Returning a salt is only needed, if you are not using a modern
+     * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
+     *
+     * @see UserInterface
+     */
+    public function getSalt()
+    {
+        return null;
+    }
+
+    public function __call(string $name, array $arguments)
+    {
+        // TODO: Implement @method string getUserIdentifier()
     }
 }

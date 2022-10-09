@@ -4,4 +4,15 @@
 
 {% block body %}
 
+    <div class="container">
+        <div class="row g-3 col-6 mx-auto my-5">
+            {% if error %}
+                <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+
+            <h1>Login</h1>
+
+            {{ form(loginForm) }}
+        </div>
+    </div>
 {% endblock %}
