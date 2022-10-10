@@ -57,7 +57,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->setStatus(false);
-        $this->createdAt = new \DateTimeImmutable();
+        $this->setRoles(['ROLE_USER']);
+        $this->setCreatedAt(new \DateTimeImmutable());
     }
 
     public function getId(): ?int
@@ -72,9 +73,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setFirstname(?string $firstname): self
     {
-        $this->firstname = $firstname;
+        $this->firstname = ucfirst($firstname);
 
         return $this;
+    }
+
+    public function getPersonalData()
+    {
+        if ($this->getFirstname() && $this->getLastname()) {
+            return $this->getFirstname() . ' ' . $this->getLastname();
+        }
+
+        return $this->getUsername();
+    }
+
+    public function getUserInfoArray()
+    {
+        return [
+            'First name' => $this->getFirstname(),
+            'Last name' => $this->getLastname(),
+            'Username' => $this->getUsername(),
+            'Email' => $this->getEmail(),
+        ];
     }
 
     public function getLastname(): ?string
@@ -84,7 +104,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setLastname(?string $lastname): self
     {
-        $this->lastname = $lastname;
+        $this->lastname = ucfirst($lastname);
 
         return $this;
     }
@@ -116,6 +136,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
+
+        return $this;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }
@@ -188,6 +215,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __toString()
     {
-        return $this->getUsername();
+        return $this->getFirstname() ?: $this->getUsername();
     }
 }

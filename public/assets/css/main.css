@@ -1,0 +1,40 @@
+/**/
+/* essential */
+/**/
+body {
+    background-color: #f8f8f8;
+    color: #151e2a;
+    font-family: "Inter", sans-serif;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 0;
+}
+
+
+/**/
+/* components */
+/**/
+.component {
+    background-color: white;
+    border-radius: 1rem;
+    padding: 2.5rem;
+    width: 100%;
+    height: 100%;
+}
+
+/**/
+/* tables */
+/**/
+.user-info tr > td:first-child {
+    padding-block: 0.9rem;
+    font-weight: bold;
+}
+
+td, th {
+    vertical-align: middle;
+}
+
+tr:last-child td, tr:last-child th{
+    border-bottom-width: 0;
+}

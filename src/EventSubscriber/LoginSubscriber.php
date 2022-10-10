@@ -5,11 +5,10 @@ namespace App\EventSubscriber;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Core\AuthenticationEvents;
+use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
 
 class LoginSubscriber implements EventSubscriberInterface
 {
-
 
     private RequestStack $requestStack;
 
@@ -22,7 +21,7 @@ class LoginSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            AuthenticationEvents::AUTHENTICATION_SUCCESS => 'onLogin',
+            LoginSuccessEvent::class => 'onLogin',
         ];
     }
 

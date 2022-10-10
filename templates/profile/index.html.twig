@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profile - {{ app.user }}{% endblock %}
+
+{% block body %}
+
+
+
+    <div class="row py-5">
+        <div class="col-md-4">
+            <div class="component d-flex flex-column justify-content-center align-items-center">
+                <img src="https://placekitten.com/180" alt="Profile Picture" class="rounded-circle">
+                <h1 class="h2 py-3 fw-semibold m-0">{{ app.user.personalData }}</h1>
+                <p class="text-black-50">{{ app.user.email }}</p>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="component">
+                <small class="fw-bold text-black-50">ACCOUNT INFORMATION</small>
+                <table class="table user-info mt-3">
+                    {% for key, userInfo in app.user.userInfoArray %}
+                        <tr>
+                            <td>{{ key }}</td>
+                            <td>
+                                {{ userInfo ? userInfo : "Not defined"|bubble('secondary') }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <td>Roles</td>
+                        <td>
+                            <div class="badge bg-primary bg-opacity-10 text-primary border border-opacity-10 border-primary">
+                                User
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="component">
+                <small class="fw-bold text-black-50">YOUR LINKS</small>
+                <table class="table mt-3">
+                    <thead>
+                    <tr>
+                        <th>Long URL</th>
+                        <th>Short URL</th>
+                        <th>Options</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>https://www.test.pl/bardzo-dlugi-link?parametr=true</td>
+                        <td>http://localhost/kv7yl1</td>
+                        <td>
+                            <div class="btn btn-primary">Edit</div>
+                            <div class="btn btn-danger">Delete</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>https://www.test.pl/bardzo-dlugi-link?parametr=true</td>
+                        <td>http://localhost/kv7yl1</td>
+                        <td>
+                            <div class="btn btn-primary">Edit</div>
+                            <div class="btn btn-danger">Delete</div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

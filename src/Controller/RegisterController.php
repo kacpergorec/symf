@@ -18,13 +18,11 @@ class RegisterController extends AbstractController
     public function index(Request $request, ManagerRegistry $doctrine, UserPasswordHasherInterface $passwordHasher): Response
     {
 
-
         $entityManager = $doctrine->getManager();
 
         $user = new User();
 
         $form = $this->createForm(RegisterUserType::class, $user);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -53,7 +51,6 @@ class RegisterController extends AbstractController
 
         return $this->renderForm('auth/register.html.twig', [
             'registerForm' => $form,
-
         ]);
     }
 }

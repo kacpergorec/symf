@@ -1,7 +1,7 @@
 <div class="col-auto col-lg-4 text-end ">
     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
         <a class="px-3 text-decoration-none text-light" href="{{ path('app_profile') }}">
-           <span class="px-1">{{ app.user.firstname ? app.user.firstname : app.user }}</span>
+           <span class="px-1">{{ app.user }}</span>
            <img src="https://placekitten.com/46" alt="Profile Picture" class="rounded-circle">
         </a>
     {% else %}
