@@ -22,18 +22,10 @@
                         <tr>
                             <td>{{ key }}</td>
                             <td>
-                                {{ userInfo ? userInfo : "Not defined"|bubble('secondary') }}
+                                {{ userInfo ? userInfo|raw : "Not defined"|bubble('secondary') }}
                             </td>
                         </tr>
                     {% endfor %}
-                    <tr>
-                        <td>Roles</td>
-                        <td>
-                            <div class="badge bg-primary bg-opacity-10 text-primary border border-opacity-10 border-primary">
-                                User
-                            </div>
-                        </td>
-                    </tr>
                 </table>
 
             </div>

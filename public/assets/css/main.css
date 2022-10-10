@@ -16,6 +16,7 @@ p, h1, h2, h3, h4, h5, h6 {
 /* components */
 /**/
 .component {
+    border: 2px solid #00000014;
     background-color: white;
     border-radius: 1rem;
     padding: 2.5rem;

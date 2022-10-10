@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use App\Service\BubbleRenderer;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -87,13 +88,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->getUsername();
     }
 
-    public function getUserInfoArray()
+    public function getUserInfoArray(): array
     {
+        $bubbleRenderer = new BubbleRenderer();
+
         return [
             'First name' => $this->getFirstname(),
             'Last name' => $this->getLastname(),
             'Username' => $this->getUsername(),
             'Email' => $this->getEmail(),
+            'Roles' => $bubbleRenderer->renderBubbles($this->getRoles()),
         ];
     }
 

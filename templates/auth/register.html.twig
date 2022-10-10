@@ -6,26 +6,27 @@
 
     <div class="container">
         <div class="row g-3 col-6 mx-auto my-5">
+            <div class="component">
+                <h1 class="mb-4">Register</h1>
 
-            <h1>Register</h1>
+                {{ form_start(registerForm) }}
 
-            {{ form_start(registerForm) }}
+                <div class="row">
+                    <div class="col-md-6">
+                        {{ form_row(registerForm.email) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_row(registerForm.username) }}
+                    </div>
+                    <div class="col-12">
+                        {{ form_row(registerForm.password) }}
+                    </div>
+                </div>
 
-            <div class="row">
-                <div class="col-md-6">
-                    {{ form_row(registerForm.email) }}
-                </div>
-                <div class="col-md-6">
-                    {{ form_row(registerForm.username) }}
-                </div>
-                <div class="col-12">
-                    {{ form_row(registerForm.password) }}
-                </div>
+                {{ form_end(registerForm) }}
             </div>
-
-            {{ form_end(registerForm) }}
-
         </div>
+
 
     </div>
 {% endblock %}

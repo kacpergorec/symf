@@ -2,12 +2,21 @@
 
 namespace App\Twig;
 
+use App\Service\BubbleRenderer;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
+
 class BubbleExtension extends AbstractExtension
 {
+    private BubbleRenderer $bubbleRenderer;
+
+    public function __construct(BubbleRenderer $bubbleRenderer)
+    {
+        $this->bubbleRenderer = $bubbleRenderer;
+    }
+
     public function getFilters(): array
     {
         return [
@@ -24,6 +33,6 @@ class BubbleExtension extends AbstractExtension
 
     public function renderBubble($value, $color): string
     {
-        return "<span class='fw-normal badge bg-opacity-10 border border-opacity-10 border-{$color} bg-{$color} text-{$color}'>{$value}</span>";
+        return $this->bubbleRenderer->renderBubble($value, $color);
     }
 }
