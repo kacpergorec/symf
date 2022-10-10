@@ -89,7 +89,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getUsername(): ?string
+    public function getUsername(): string
     {
         return $this->username;
     }
@@ -184,5 +184,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __call(string $name, array $arguments)
     {
         // TODO: Implement @method string getUserIdentifier()
+    }
+
+    public function __toString()
+    {
+        return $this->getUsername();
     }
 }

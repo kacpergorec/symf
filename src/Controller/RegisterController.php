@@ -30,20 +30,26 @@ class RegisterController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
 
-            $plainPassword = $user->getPassword();
             $hashedPassword = $passwordHasher->hashPassword(
                 $user,
-                $plainPassword
+                $user->getPassword()
             );
 
             $user->setPassword($hashedPassword);
 
             $entityManager->persist($user);
-
             $entityManager->flush();
 
-            return new Response('Saved new user with id ' . $user->getId());
+            $this->addFlash(
+                'info',
+                "Congratulations {$user}! You are now a part of growing <b>Symf</b> community! <br>
+                An activation link to <b>{$user->getEmail()}</b> was <u>not</u> sent because mailing is not implemented. 
+                &nbsp <small>(...yet)</small>"
+            );
+
+            return $this->redirectToRoute('app_home');
         }
+
 
         return $this->renderForm('auth/register.html.twig', [
             'registerForm' => $form,

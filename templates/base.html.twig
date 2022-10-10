@@ -25,34 +25,24 @@
 <body>
 {% block nav %}
 
-
     <header class="p-3 text-bg-dark bg-black">
         <div class="container">
             <div class="d-flex flex-wrap align-items-center justify-content-between justify-content-lg-start">
 
-                <div class="col-auto col-lg-4">
-                    <img src="{{ asset('assets/images/logo/symf logo.gif') }}" alt="" height="24">
+                {% include('menu/logo.html.twig') %}
 
-                </div>
+                {% include('menu/menu.html.twig') %}
 
-
-                <ul class="nav col-12 col-lg-4 my-2 justify-content-center d-none d-lg-flex">
-                    <li><a href="/" class="nav-link px-2 text-secondary">Home</a></li>
-                    <li><a href="features" class="nav-link px-2 text-white">Features</a></li>
-                    <li><a href="pricing" class="nav-link px-2 text-white">Pricing</a></li>
-                    <li><a href="faq" class="nav-link px-2 text-white">FAQs</a></li>
-                    <li><a href="about" class="nav-link px-2 text-white">About</a></li>
-                </ul>
-
-                <div class="col-auto col-lg-4 text-end ">
-                    <a href="{{ path('app_login') }}" class="btn btn-outline-light me-2">Login</a>
-                    <a href="{{ path('app_register') }}" class="btn btn-warning">Register</a>
-                </div>
+                {% include('menu/auth.html.twig') %}
             </div>
         </div>
     </header>
 
 {% endblock %}
-{% block body %}{% endblock %}
+<div class="container">
+    {% include('components/flash_messages.html.twig') %}
+
+    {% block body %}{% endblock %}
+</div>
 </body>
 </html>

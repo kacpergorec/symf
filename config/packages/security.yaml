@@ -20,8 +20,11 @@ security:
             form_login:
                 login_path: app_login
                 check_path: app_login
+            logout:
+                path: app_logout
+                target: app_home
             login_throttling:
-                max_attempts: 3
+                max_attempts: 10
                 interval: '1 minute'
 
             # activate different ways to authenticate
