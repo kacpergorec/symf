@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <div class="row g-3 col-6 mx-auto my-5">
+        <div class="component">
+            <small class="fw-bold text-black-50">EDIT PROFILE INFO</small>
+            <div class="mt-4">
+                {{ form(profileForm) }}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

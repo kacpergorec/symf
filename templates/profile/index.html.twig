@@ -12,9 +12,13 @@
                 <img src="https://placekitten.com/180" alt="Profile Picture" class="rounded-circle">
                 <h1 class="h2 py-3 fw-semibold m-0">{{ app.user.personalData }}</h1>
                 <p class="text-black-50">{{ app.user.email }}</p>
+                <div class="mt-4">
+                    <a href="{{ path('app_profile_edit') }}" class="btn btn-outline-dark  d-inline">Edit profile</a>
+                    <a href="{{ path('app_logout') }}" class="btn btn-dark d-inline">Logout</a>
+                </div>
             </div>
         </div>
-        <div class="col-md-8">
+        <div class="col-md-8 mt-5 mt-md-0">
             <div class="component">
                 <small class="fw-bold text-black-50">ACCOUNT INFORMATION</small>
                 <table class="table user-info mt-3">
@@ -27,7 +31,6 @@
                         </tr>
                     {% endfor %}
                 </table>
-
             </div>
         </div>
     </div>
@@ -66,4 +69,10 @@
             </div>
         </div>
     </div>
+    <div class="text-center text-md-end my-4">
+        <small>
+            <a href="{{ path('app_profile_delete') }}" class="text-black-50 text-decoration-none">Delete account</a>
+        </small>
+    </div>
+
 {% endblock %}

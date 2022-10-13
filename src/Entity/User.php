@@ -24,7 +24,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $firstname = null;
 
@@ -44,21 +43,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column]
-    private array $roles = [];
+    private array $roles = ['ROLE_USER'];
 
     #[ORM\Column]
-    private ?bool $status = null;
+    private ?bool $verified = false;
 
-    /**
-     * @var string The hashed password
-     */
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
     public function __construct()
     {
-        $this->setStatus(false);
-        $this->setRoles(['ROLE_USER']);
         $this->setCreatedAt(new \DateTimeImmutable());
     }
 
@@ -166,14 +160,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isStatus(): ?bool
+    public function isVerified(): ?bool
     {
-        return $this->status;
+        return $this->verified;
     }
 
-    public function setStatus(bool $status): self
+    public function setVerified(bool $verified): self
     {
-        $this->status = $status;
+        $this->verified = $verified;
 
         return $this;
     }
