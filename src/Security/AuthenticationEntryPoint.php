@@ -21,7 +21,7 @@ class AuthenticationEntryPoint implements AuthenticationEntryPointInterface
 
     public function start(Request $request, AuthenticationException $authException = null): Response
     {
-        $request->getSession()->getFlashBag()->add('warning', 'Unauthorized');
+        $request->getSession()->getFlashBag()->add('warning', 'Access denied.');
 
         return new RedirectResponse($this->urlGenerator->generate('app_login'));
     }

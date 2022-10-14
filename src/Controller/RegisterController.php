@@ -5,23 +5,32 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\Type\RegisterUserType;
 use App\Repository\UserRepository;
+use App\Service\VerificationLinkMailerHelper;
+use App\Service\VerificationURLValidator;
+use Doctrine\DBAL\Driver\Exception;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ManagerRegistry;
+use http\Exception\InvalidArgumentException;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\Message;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\env;
 
 class RegisterController extends AbstractController
 {
+
+
     #[Route('/register', name: 'app_register')]
-    public function index(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, VerifyEmailHelperInterface $verifyEmailHelper): Response
+    public function register(Request $request, EntityManagerInterface $entityManager, MailerInterface $mailer, UserPasswordHasherInterface $passwordHasher, VerifyEmailHelperInterface $verifyEmailHelper): Response
     {
 
         $user = new User();
@@ -42,55 +51,86 @@ class RegisterController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $this->addFlash(
-                'info',
-                "Congratulations {$user}! You are now a part of growing <b>Symf</b> community! <br>
-                An activation link to <b>{$user->getEmail()}</b> was <u>not</u> sent because mailing is not implemented. 
-                &nbsp <small>(...yet)</small>"
-            );
-
             $signatureComponents = $verifyEmailHelper->generateSignature(
                 'app_verify_email',
-                $user->getId(),
+                (string)$user->getId(),
                 $user->getEmail(),
                 ['id' => $user->getId()]
             );
 
-            $this->addFlash('success', 'Confirm your email at: ' . $signatureComponents->getSignedUrl());
+            $activationEmail = (new TemplatedEmail())
+                ->from($this->getParameter('app.mail.from'))
+                ->to($user->getEmail())
+                ->subject('Confirmation Email - Symf')
+                ->htmlTemplate('emails/verification.html.twig')
+                ->context([
+                    'user' => $user,
+                    'activationLink' => $signatureComponents->getSignedUrl()
+                ]);
+
+            try {
+                $mailer->send($activationEmail);
+                $this->addFlash(
+                    'info',
+                    "Congratulations {$user}! You are now a part of growing <b>Symf</b> community! <br>
+                An activation link to <b>{$user->getEmail()}</b> was sent."
+                );
+
+            } catch (TransportException $e) {
+                $this->addFlash('warning', 'An activation link was not sent. Please contact with the Administrator.');
+            }
+
 
         }
-
 
         return $this->renderForm('auth/register.html.twig', [
             'registerForm' => $form,
         ]);
     }
 
+    #[Route('/resend-verification', name: 'app_resend_verification')]
+    public function resend(UserRepository $userRepository, Request $request, VerificationLinkMailerHelper $verificationLinkMailerHelper): Response
+    {
+
+        $username = $request->get('username');
+        $user = $userRepository->findOneBy(['username' => $username]);
+
+        if ($user && !$user->isVerified()) {
+            dd('send mail here');
+        } else {
+            throw new BadRequestHttpException();
+        }
+
+        // Will not add this message because of privacy reasons
+        // $this->addFlash('danger','This account is already verified');
+
+        return $this->redirectToRoute('app_login');
+    }
 
     #[Route("/verify", name: "app_verify_email")]
-    public function verifyUserEmail(Request $request, EntityManagerInterface $entityManager, VerifyEmailHelperInterface $verifyEmailHelper, UserRepository $userRepository): Response
+    public function verify(Request $request, VerificationURLValidator $URLValidator, EntityManagerInterface $entityManager): Response
     {
-        $user = $userRepository->find($request->query->get('id'));
-        if (!$user) {
-            throw $this->createNotFoundException();
+
+        $URLValidator->validate($request);
+
+        if ($URLValidator->isValid()) {
+            $user = $URLValidator->getUser();
+
+            if (!$user->isVerified()) {
+                $user->setVerified(true);
+                $entityManager->flush();
+                $this->addFlash('success', 'Your account is now active and ready!');
+            } else {
+                $this->addFlash('info', 'Your account is already verified.');
+            }
+
+        } else {
+            foreach ($URLValidator->getErrors() as $error) {
+                $this->addFlash('danger', $error);
+            }
         }
 
-        try {
-            $verifyEmailHelper->validateEmailConfirmation(
-                $request->getUri(),
-                $user->getId(),
-                $user->getEmail()
-            );
-        } catch (VerifyEmailExceptionInterface $e) {
-            $this->addFlash('danger', $e->getReason());
-        }
-
-        $user->setVerified(true);
-        $entityManager->flush();
-
-        $this->addFlash('success', 'Your account is now active and ready!');
-
-        return $this->redirectToRoute('app_register');
+        return $this->redirectToRoute('app_login');
     }
 
 }

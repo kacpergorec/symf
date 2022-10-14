@@ -9,7 +9,7 @@
 
             {% if error %}
                 <div class="alert alert-danger" role="alert">
-                    {{ error.messageKey|trans(error.messageData, 'security') }}
+                    {{ error.messageKey|trans(error.messageData, 'security')|raw }}
                 </div>
             {% endif %}
 

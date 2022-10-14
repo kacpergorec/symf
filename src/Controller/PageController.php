@@ -11,6 +11,8 @@ class PageController extends AbstractController
     #[Route('/{slug}', name: 'app_page', methods: ['GET'], priority: -10)]
     public function index(): Response
     {
-        return new Response(self::class);
+        return $this->render('page/index.html.twig', [
+            'controller_name' => 'PageController',
+        ]);
     }
 }

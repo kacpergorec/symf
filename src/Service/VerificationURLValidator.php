@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
-class VerifyURLValidator
+class VerificationURLValidator
 {
 
     private User $user;

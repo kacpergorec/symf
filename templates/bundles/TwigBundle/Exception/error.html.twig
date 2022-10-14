@@ -18,7 +18,7 @@
 
 {% block body %}
     <div class="error-404-content">
-        <h1 class="small text-black-50 fw-bold">404 - Not found</h1>
+        <h1 class="small text-black-50 fw-bold">{{ status_code}} - {{ status_text }}</h1>
         <h2 class="h1 mt-2 fw-bolder">Are you lost?</h2>
         <a href="{{ path('app_home') }}" class="btn btn-outline-dark mt-3 py-2 px-5">Go to homepage</a>
     </div>

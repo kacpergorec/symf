@@ -6,6 +6,7 @@ namespace App\EventSubscriber;
 use App\Entity\User;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Http\Event\CheckPassportEvent;
@@ -15,11 +16,13 @@ class LoginSubscriber implements EventSubscriberInterface
 {
 
     private RequestStack $requestStack;
+    private UrlGeneratorInterface $router;
 
-    public function __construct(RequestStack $requestStack)
+    public function __construct(RequestStack $requestStack, UrlGeneratorInterface $router)
     {
 
         $this->requestStack = $requestStack;
+        $this->router = $router;
     }
 
     public static function getSubscribedEvents(): array
@@ -50,8 +53,11 @@ class LoginSubscriber implements EventSubscriberInterface
         }
 
         if (!$user->isVerified()) {
+
+            $resendLink = $this->router->generate('app_resend_verification', ['username' => $user]);
+
             throw new CustomUserMessageAuthenticationException(
-                'Please verify your account before logging in.'
+                "Please verify your account before logging in. <a href='{$resendLink}'>Resend activation link</a>"
             );
         }
     }
