@@ -2,7 +2,7 @@
 
 namespace App\Twig;
 
-use App\Service\BubbleRenderer;
+use App\Util\BubbleRenderer;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;

@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\Type\LoginUserType;
+use App\Form\Type\UserLoginType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,7 +22,7 @@ class LoginController extends AbstractController
 
         $user = new User();
 
-        $form = $formFactory->createNamed('', LoginUserType ::class, $user);
+        $form = $formFactory->createNamed('', UserLoginType ::class, $user);
 
         return $this->renderForm('auth/login.html.twig', [
             'lastUsername' => $lastUsername,

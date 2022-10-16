@@ -2,17 +2,16 @@
 
 namespace App\Controller;
 
+use App\Form\Type\UserDeleteType;
 use App\Form\Type\UserEditType;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Security;
-use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 
 class ProfileController extends AbstractController
 {
@@ -63,17 +62,31 @@ class ProfileController extends AbstractController
     }
 
     #[Route('/profile/delete', name: 'app_profile_delete')]
-    public function delete(Request $request, UserPasswordHasherInterface $passwordHasher): Response
+    public function delete(Session $session, TokenStorageInterface $tokenStorage, Request $request): Response
     {
         $user = $this->security->getUser();
 
+        if (!$user) {
+            throw $this->createNotFoundException();
+        }
+
         $entityManager = $this->doctrine->getManager();
 
-        $form = $this->createFormBuilder($user)
-            ->add('password', PasswordType::class, ['help' => 'Type in your current password to delete your account.',
-                'constraints' => [new UserPassword()]])
-            ->add('save', SubmitType::class, ['attr' => ['class' => 'btn btn-outline-danger'], 'label' => 'Delete account'])
-            ->getForm();
+        $form = $this->createForm(UserDeleteType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $tokenStorage->setToken(null);
+            $session->invalidate();
+
+            $entityManager->remove($user);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Your account has been deleted.');
+
+            return $this->redirectToRoute('app_home');
+        }
 
         return $this->renderForm('profile/edit.html.twig', [
             'profileForm' => $form,

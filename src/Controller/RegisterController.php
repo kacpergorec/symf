@@ -3,39 +3,28 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\Type\RegisterUserType;
+use App\Form\Type\UserRegisterType;
 use App\Repository\UserRepository;
 use App\Service\VerificationLinkMailerHelper;
 use App\Service\VerificationURLValidator;
-use Doctrine\DBAL\Driver\Exception;
 use Doctrine\ORM\EntityManagerInterface;
-use http\Exception\InvalidArgumentException;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Mailer\Exception\TransportException;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Message;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\env;
 
-class RegisterController extends AbstractController
+class RegisterController extends BaseController
 {
-
+    private string $sendFaliureMessage = 'An activation link was not sent. Please contact with the Administrator.';
 
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, EntityManagerInterface $entityManager, MailerInterface $mailer, UserPasswordHasherInterface $passwordHasher, VerifyEmailHelperInterface $verifyEmailHelper): Response
+    public function register(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, VerificationLinkMailerHelper $verificationLinkMailerHelper): Response
     {
 
         $user = new User();
 
-        $form = $this->createForm(RegisterUserType::class, $user);
+        $form = $this->createForm(UserRegisterType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -51,35 +40,15 @@ class RegisterController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $signatureComponents = $verifyEmailHelper->generateSignature(
-                'app_verify_email',
-                (string)$user->getId(),
-                $user->getEmail(),
-                ['id' => $user->getId()]
-            );
-
-            $activationEmail = (new TemplatedEmail())
-                ->from($this->getParameter('app.mail.from'))
-                ->to($user->getEmail())
-                ->subject('Confirmation Email - Symf')
-                ->htmlTemplate('emails/verification.html.twig')
-                ->context([
-                    'user' => $user,
-                    'activationLink' => $signatureComponents->getSignedUrl()
-                ]);
-
-            try {
-                $mailer->send($activationEmail);
+            if ($verificationLinkMailerHelper->send($user)) {
                 $this->addFlash(
                     'info',
                     "Congratulations {$user}! You are now a part of growing <b>Symf</b> community! <br>
                 An activation link to <b>{$user->getEmail()}</b> was sent."
                 );
-
-            } catch (TransportException $e) {
-                $this->addFlash('warning', 'An activation link was not sent. Please contact with the Administrator.');
+            } else {
+                $this->addFlash('warning', $this->sendFaliureMessage );
             }
-
 
         }
 
@@ -96,7 +65,11 @@ class RegisterController extends AbstractController
         $user = $userRepository->findOneBy(['username' => $username]);
 
         if ($user && !$user->isVerified()) {
-            dd('send mail here');
+            if ($verificationLinkMailerHelper->send($user)) {
+                $this->addFlash('success','Activation link was sent again.');
+            }else{
+                $this->addFlash('warning', $this->sendFaliureMessage );
+            }
         } else {
             throw new BadRequestHttpException();
         }

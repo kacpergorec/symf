@@ -12,10 +12,6 @@ framework:
         cookie_samesite: lax
         storage_factory_id: session.storage.factory.native
 
-    exceptions:
-        Symfony\Component\HttpKernel\Exception\BadRequestHttpException:
-            status_code: 422
-
     #esi: true
     #fragments: true
     php_errors:
