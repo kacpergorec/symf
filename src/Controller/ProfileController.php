@@ -77,13 +77,18 @@ class ProfileController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            ///log out current user
             $tokenStorage->setToken(null);
             $session->invalidate();
 
-            $entityManager->remove($user);
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Your account has been deleted.');
+            try {
+                $entityManager->remove($user);
+                $entityManager->flush();
+                $this->addFlash('success', 'Your account has been deleted.');
+            } catch (\Exception $e) {
+                $this->addFlash('danger', 'Your account was not deleted due to an error.');
+                throw new $e;
+            }
 
             return $this->redirectToRoute('app_home');
         }

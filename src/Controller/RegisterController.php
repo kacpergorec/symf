@@ -47,7 +47,7 @@ class RegisterController extends BaseController
                 An activation link to <b>{$user->getEmail()}</b> was sent."
                 );
             } else {
-                $this->addFlash('warning', $this->sendFaliureMessage );
+                $this->addFlash('warning', $this->sendFaliureMessage);
             }
 
         }
@@ -66,9 +66,9 @@ class RegisterController extends BaseController
 
         if ($user && !$user->isVerified()) {
             if ($verificationLinkMailerHelper->send($user)) {
-                $this->addFlash('success','Activation link was sent again.');
-            }else{
-                $this->addFlash('warning', $this->sendFaliureMessage );
+                $this->addFlash('success', 'Activation link was sent again.');
+            } else {
+                $this->addFlash('warning', $this->sendFaliureMessage);
             }
         } else {
             throw new BadRequestHttpException();
