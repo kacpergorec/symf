@@ -1,2 +1,3 @@
-test:
-  message:  Hello!
+login:
+  not_verified: Please verify your account before logging in.
+  resend_activation_link: Resend activation link.

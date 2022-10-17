@@ -4,42 +4,32 @@ declare (strict_types=1);
 namespace App\EventSubscriber;
 
 use App\Entity\User;
+use App\Util\TwigMessage\TwigLinkMessage;
+use App\Util\TwigMessage\TwigMessage;
+use App\Util\TwigMessage\TwigMessageRenderer;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Http\Event\CheckPassportEvent;
-use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
 
 class LoginSubscriber implements EventSubscriberInterface
 {
 
-    private RequestStack $requestStack;
-    private UrlGeneratorInterface $router;
 
-    public function __construct(RequestStack $requestStack, UrlGeneratorInterface $router)
+    private TwigMessageRenderer $twigMessageRenderer;
+    private RouterInterface $router;
+
+    public function __construct(TwigMessageRenderer $twigMessageRenderer, RouterInterface $router)
     {
-
-        $this->requestStack = $requestStack;
+        $this->twigMessageRenderer = $twigMessageRenderer;
         $this->router = $router;
     }
 
     public static function getSubscribedEvents(): array
     {
         return [
-            LoginSuccessEvent::class => 'onLogin',
             CheckPassportEvent::class => ['onCheckPassport', -10],
         ];
-    }
-
-    public function onLogin(): void
-    {
-        $this->requestStack
-            ->getCurrentRequest()
-            ->getSession()
-            ->getFlashBag()
-            ->add('info', 'Welcome back!');
-
     }
 
     public function onCheckPassport(CheckPassportEvent $event): void
@@ -55,9 +45,28 @@ class LoginSubscriber implements EventSubscriberInterface
 
             $resendLink = $this->router->generate('app_resend_verification', ['username' => $user]);
 
-            throw new CustomUserMessageAuthenticationException(
-                "Please verify your account before logging in. <a href='{$resendLink}'>Resend activation link</a>"
+            $message = new TwigLinkMessage(
+                'login.not_verified', [
+                    'email' => $user->getEmail(),
+                    'username' => $user->getUsername()
+                ],
+                'login.resend_activation_link',
+                $resendLink,
             );
+
+            throw new CustomUserMessageAuthenticationException(
+                $this->twigMessageRenderer->render($message)
+            );
+
+//
+//            throw new CustomUserMessageAuthenticationException(
+//                $this->twig->render('components/message_link.html.twig', [
+//                        'message' => 'login.not_verified',
+//                        'link' => $resendLink,
+//                        'linkMessage' => 'login.resend_activation_link'
+//                    ]
+//                )
+//            );
         }
     }
 }

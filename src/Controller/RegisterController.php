@@ -8,13 +8,14 @@ use App\Repository\UserRepository;
 use App\Service\VerificationLinkMailerHelper;
 use App\Service\VerificationURLValidator;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-class RegisterController extends BaseController
+class RegisterController extends AbstractController
 {
     private string $sendFaliureMessage = 'An activation link was not sent. Please contact with the Administrator.';
 
