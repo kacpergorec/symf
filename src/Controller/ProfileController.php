@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Form\Type\UserDeleteType;
 use App\Form\Type\UserEditType;
-use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,18 +12,10 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ProfileController extends AbstractController
 {
-
-    private Security $security;
-    private ManagerRegistry $doctrine;
-
-    public function __construct(Security $security, ManagerRegistry $doctrine)
-    {
-        $this->security = $security;
-        $this->doctrine = $doctrine;
-    }
 
     #[Route('/profile', name: 'app_profile')]
     public function index(): Response
@@ -32,11 +24,9 @@ class ProfileController extends AbstractController
     }
 
     #[Route('/profile/edit', name: 'app_profile_edit')]
-    public function edit(Request $request): Response
+    public function edit(EntityManagerInterface $entityManager, Request $request, TranslatorInterface $translator, Security $security): Response
     {
-        $entityManager = $this->doctrine->getManager();
-
-        $user = $this->security->getUser();
+        $user = $security->getUser();
 
         $form = $this->createForm(UserEditType::class, $user);
         $form->handleRequest($request);
@@ -49,7 +39,7 @@ class ProfileController extends AbstractController
 
             $this->addFlash(
                 'success',
-                "Account info saved!"
+                $translator->trans('profile.edit.success')
             );
 
             return $this->redirectToRoute('app_profile');
@@ -62,15 +52,13 @@ class ProfileController extends AbstractController
     }
 
     #[Route('/profile/delete', name: 'app_profile_delete')]
-    public function delete(Session $session, TokenStorageInterface $tokenStorage, Request $request): Response
+    public function delete(Session $session, TokenStorageInterface $tokenStorage, Request $request, Security $security, EntityManagerInterface $entityManager, TranslatorInterface $translator): Response
     {
-        $user = $this->security->getUser();
+        $user = $security->getUser();
 
         if (!$user) {
             throw $this->createNotFoundException();
         }
-
-        $entityManager = $this->doctrine->getManager();
 
         $form = $this->createForm(UserDeleteType::class);
         $form->handleRequest($request);
@@ -84,9 +72,9 @@ class ProfileController extends AbstractController
             try {
                 $entityManager->remove($user);
                 $entityManager->flush();
-                $this->addFlash('success', 'Your account has been deleted.');
+                $this->addFlash('success', $translator->trans('profile.delete.success'));
             } catch (\Exception $e) {
-                $this->addFlash('danger', 'Your account was not deleted due to an error.');
+                $this->addFlash('danger', $translator->trans('profile.delete.error'));
                 throw new $e;
             }
 

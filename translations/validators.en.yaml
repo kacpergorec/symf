@@ -1,0 +1,7 @@
+user:
+  email:
+    exists: User with this {{ label }} exists.
+  username:
+    exists: This {{ label }} is already taken.
+  password:
+    wrong: Wrong value for your current password.

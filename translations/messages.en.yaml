@@ -1,3 +1,46 @@
+user:
+  username: Username
+  firstname: Firstname
+  lastname: Lastname
+  password: Password
+  email: Email
+  placeholder_username: YourFancyName123
+
 login:
+  header: Login
+  sign_in: Sign in
   not_verified: Please verify your account before logging in.
   resend_activation_link: Resend activation link.
+
+register:
+  header: Register
+  sign_up: Sign up
+  placeholder:
+    email: elon@spacex.com
+    username: TheSpaceGuy1971
+  password_help: We dont care how secure your password is.
+  activation:
+    sent: "Congratulations %user%! You are now a part of growing **Symf** community! An activation link to **%email%** was sent."
+    not_sent: An activation link was not sent. Please contact with the Administrator.
+    sent_again: Activation link was sent again.
+
+profile:
+  header: Profile
+  edit:
+    success: Account information saved!
+    error: Error while saving account information.
+  delete:
+    success: Your account was deleted.
+    error: Your account
+    type_current_password: Type in your current password to delete your account.
+    delete_account: Delete account
+  account_information: ACCOUNT INFORMATION
+  edit_profile_info: EDIT PROFILE INFO
+  your_links: YOUR LINKS
+
+interface:
+  save_changes: Save changes
+  not_defined: Not defined
+  logout: Logout
+  edit: Edit
+  edit_profile: Edit profile

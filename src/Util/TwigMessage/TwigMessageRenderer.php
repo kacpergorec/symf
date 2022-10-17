@@ -8,7 +8,7 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-class TwigMessageRenderer
+class TwigMessageRenderer implements TwigMessageRendererInterface
 {
     private Environment $twig;
 
@@ -24,7 +24,6 @@ class TwigMessageRenderer
      */
     public function render(TwigMessage $message): string
     {
-
         return $this->twig->render(
             $message->getTemplatePath(),
             $message->getVariables()

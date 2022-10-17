@@ -17,11 +17,23 @@ class UserEditType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('firstname', TextType::class)
-            ->add('lastname', TextType::class)
-            ->add('username', TextType::class, [ 'required' => true])
-            ->add('email', EmailType::class, ['required' => true])
-            ->add('save', SubmitType::class, ['label' => 'Save changes']);
+            ->add('firstname', TextType::class, [
+                'label' => 'user.firstname'
+            ])
+            ->add('lastname', TextType::class, [
+                'label' => 'user.lastname'
+            ])
+            ->add('username', TextType::class, [
+                'label' => 'user.username',
+                'required' => true
+            ])
+            ->add('email', EmailType::class, [
+                'label' => 'user.email',
+                'required' => true
+            ])
+            ->add('save', SubmitType::class, [
+                'label' => 'interface.save_changes'
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

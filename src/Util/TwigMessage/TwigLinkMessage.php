@@ -10,6 +10,7 @@ use JetBrains\PhpStorm\Pure;
 class TwigLinkMessage extends TwigMessage
 {
 
+    protected const TWIG_TEMPLATE_PATH = 'components/message_link.html.twig';
     protected string $linkMessage;
     protected string $link;
 
@@ -17,7 +18,6 @@ class TwigLinkMessage extends TwigMessage
     {
         parent::__construct($message, $messageExtra);
 
-        $this->setTemplate('components/message_link.html.twig');
         $this->setLinkMessage($linkMessage);
         $this->setLink($link);
     }

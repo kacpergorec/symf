@@ -19,12 +19,13 @@ class UserDeleteType extends AbstractType
     {
         $builder
             ->add('plainPassword', PasswordType::class, [
-                    'help' => 'Type in your current password to delete your account.',
+                    'label' => 'user.password',
+                    'help' => 'profile.delete.type_current_password',
                 ]
             )
             ->add('save', SubmitType::class, [
                     'attr' => ['class' => 'btn btn-outline-danger'],
-                    'label' => 'Delete account'
+                    'label' => 'profile.delete_account'
                 ]
             );
     }

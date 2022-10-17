@@ -14,15 +14,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class RegisterController extends AbstractController
 {
-    private string $sendFaliureMessage = 'An activation link was not sent. Please contact with the Administrator.';
-
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, VerificationLinkMailerHelper $verificationLinkMailerHelper): Response
+    public function register(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, VerificationLinkMailerHelper $verificationLinkMailerHelper, TranslatorInterface $translator): Response
     {
-
         $user = new User();
 
         $form = $this->createForm(UserRegisterType::class, $user);
@@ -44,11 +42,13 @@ class RegisterController extends AbstractController
             if ($verificationLinkMailerHelper->send($user)) {
                 $this->addFlash(
                     'info',
-                    "Congratulations {$user}! You are now a part of growing <b>Symf</b> community! <br>
-                An activation link to <b>{$user->getEmail()}</b> was sent."
+                    $translator->trans('register.activation.sent',[
+                        '%user%' => $user->getUsername(),
+                        '%email%' => $user->getEmail()
+                    ])
                 );
             } else {
-                $this->addFlash('warning', $this->sendFaliureMessage);
+                $this->addFlash('warning', $translator->trans('register.activation.not_sent'));
             }
 
         }
@@ -59,7 +59,7 @@ class RegisterController extends AbstractController
     }
 
     #[Route('/resend-verification', name: 'app_resend_verification')]
-    public function resend(UserRepository $userRepository, Request $request, VerificationLinkMailerHelper $verificationLinkMailerHelper): Response
+    public function resend(UserRepository $userRepository, Request $request, VerificationLinkMailerHelper $verificationLinkMailerHelper, TranslatorInterface $translator): Response
     {
 
         $username = $request->get('username');
@@ -67,9 +67,9 @@ class RegisterController extends AbstractController
 
         if ($user && !$user->isVerified()) {
             if ($verificationLinkMailerHelper->send($user)) {
-                $this->addFlash('success', 'Activation link was sent again.');
+                $this->addFlash('success', $translator->trans('register.activation.sent_again'));
             } else {
-                $this->addFlash('warning', $this->sendFaliureMessage);
+                $this->addFlash('warning', $translator->trans('register.activation.not_sent'));
             }
         } else {
             throw new BadRequestHttpException();

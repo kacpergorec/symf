@@ -2,4 +2,14 @@ App\Form\Model\UserDeleteModel:
   properties:
     plainPassword:
       - Symfony\Component\Security\Core\Validator\Constraints\UserPassword:
-          message: 'Wrong value for your current password'
+          message: 'user.password.wrong'
+
+App\Entity\User:
+  constraints:
+    - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+        fields: [ 'email' ]
+        message: 'user.email.exists'
+    - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+        fields: [ 'username' ]
+        message: 'user.username.exists'
+

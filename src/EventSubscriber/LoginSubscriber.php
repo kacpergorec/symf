@@ -5,8 +5,7 @@ namespace App\EventSubscriber;
 
 use App\Entity\User;
 use App\Util\TwigMessage\TwigLinkMessage;
-use App\Util\TwigMessage\TwigMessage;
-use App\Util\TwigMessage\TwigMessageRenderer;
+use App\Util\TwigMessage\TwigMessageRendererInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
@@ -16,10 +15,10 @@ class LoginSubscriber implements EventSubscriberInterface
 {
 
 
-    private TwigMessageRenderer $twigMessageRenderer;
+    private TwigMessageRendererInterface $twigMessageRenderer;
     private RouterInterface $router;
 
-    public function __construct(TwigMessageRenderer $twigMessageRenderer, RouterInterface $router)
+    public function __construct(TwigMessageRendererInterface $twigMessageRenderer, RouterInterface $router)
     {
         $this->twigMessageRenderer = $twigMessageRenderer;
         $this->router = $router;
@@ -46,10 +45,7 @@ class LoginSubscriber implements EventSubscriberInterface
             $resendLink = $this->router->generate('app_resend_verification', ['username' => $user]);
 
             $message = new TwigLinkMessage(
-                'login.not_verified', [
-                    'email' => $user->getEmail(),
-                    'username' => $user->getUsername()
-                ],
+                'login.not_verified', [],
                 'login.resend_activation_link',
                 $resendLink,
             );

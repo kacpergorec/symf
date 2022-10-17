@@ -14,8 +14,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * @method string getUserIdentifier()
  */
-#[UniqueEntity('email', message: 'User with this {{ label }} exists.')]
-#[UniqueEntity('username', message: 'This {{ label }} is already taken.')]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {

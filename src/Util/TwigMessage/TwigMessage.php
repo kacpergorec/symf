@@ -3,11 +3,19 @@ declare (strict_types=1);
 
 namespace App\Util\TwigMessage;
 
+/**
+ * Class TwigMessage
+ *
+ * Properties are linked to twig variables.
+ * Every property must be used in a twig view.
+ *
+ * @package App\Util\TwigMessage
+ */
 class TwigMessage
 {
 
     private const AFFIX = '%';
-    private string $twigMessageTemplatePath = 'components/message.html.twig';
+    protected const TWIG_TEMPLATE_PATH = 'components/message.html.twig';
     protected string $message;
     protected array $messageExtra;
 
@@ -50,13 +58,9 @@ class TwigMessage
 
     public function getTemplatePath(): string
     {
-        return $this->twigMessageTemplatePath;
+        return static::TWIG_TEMPLATE_PATH;
     }
 
-    public function setTemplate(string $templatePath)
-    {
-        $this->twigMessageTemplatePath = $templatePath;
-    }
 
     public function getVariables(): array
     {
