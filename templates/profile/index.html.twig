@@ -4,80 +4,20 @@
 
 {% block body %}
 
+    <div class="row mt-4">
+        {% include 'profile/index/personal_data.html.twig' with {'colSize' : 4} %}
 
-
-    <div class="row py-5">
-        <div class="col-md-4">
-            <div class="component d-flex flex-column justify-content-center align-items-center">
-                <img src="https://placekitten.com/180" alt="Profile Picture" class="rounded-circle">
-                <h1 class="h2 py-3 fw-semibold m-0">{{ app.user.personalData }}</h1>
-                <p class="text-black-50">{{ app.user.email }}</p>
-                <div class="mt-4">
-                    <a href="{{ path('app_profile_edit') }}" class="btn btn-outline-dark  d-inline">
-                        {{ 'interface.edit_profile'|trans }}
-                    </a>
-                    <a href="{{ path('app_logout') }}" class="btn btn-dark d-inline">
-                        {{ 'interface.logout'|trans }}
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-8 mt-5 mt-md-0">
-            <div class="component">
-                <small class="fw-bold text-black-50">{{ 'profile.account_information'|trans }}</small>
-                <table class="table user-info mt-3">
-                    {% for key, userInfo in app.user.userInfoArray %}
-                        <tr>
-                            <td>{{ key }}</td>
-                            <td>
-                                {{ userInfo ? userInfo|raw : 'interface.not_defined'|trans|bubble('secondary') }}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </table>
-            </div>
-        </div>
+        {% include 'profile/index/user_info_table.html.twig' with {'colSize' : 8} %}
     </div>
+
     <div class="row">
-        <div class="col-md-12">
-            <div class="component">
-                <small class="fw-bold text-black-50">{{ 'profile.your_links'|trans }}</small>
-                <table class="table mt-3">
-                    <thead>
-                    <tr>
-                        <th>Long URL</th>
-                        <th>Short URL</th>
-                        <th>Options</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>https://www.test.pl/bardzo-dlugi-link?parametr=true</td>
-                        <td>http://localhost/kv7yl1</td>
-                        <td>
-                            <div class="btn btn-primary">Edit</div>
-                            <div class="btn btn-danger">Delete</div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>https://www.test.pl/bardzo-dlugi-link?parametr=true</td>
-                        <td>http://localhost/kv7yl1</td>
-                        <td>
-                            <div class="btn btn-primary">Edit</div>
-                            <div class="btn btn-danger">Delete</div>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+        {% include 'profile/index/user_links_table.html.twig' with {'colSize' : 7} %}
 
-            </div>
-        </div>
+        {% include 'profile/index/shorten_link_form.html.twig' with {'colSize' : 5} %}
     </div>
-    <div class="text-center text-md-end my-4">
-        <small>
-            <a href="{{ path('app_profile_delete') }}"
-               class="text-black-50 text-decoration-none">{{ 'profile.delete.delete_account'|trans }}</a>
-        </small>
+
+    <div class="row">
+        {% include 'profile/index/delete_profile_link.html.twig' %}
     </div>
 
 {% endblock %}

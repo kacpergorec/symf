@@ -37,6 +37,10 @@ profile:
   account_information: ACCOUNT INFORMATION
   edit_profile_info: EDIT PROFILE INFO
   your_links: YOUR LINKS
+  easy_shortening: EASY LINK SHORTENING
+
+url:
+  enter_url: Enter URL to shorten
 
 interface:
   save_changes: Save changes
@@ -44,3 +48,4 @@ interface:
   logout: Logout
   edit: Edit
   edit_profile: Edit profile
+  shorten_link: Shorten link

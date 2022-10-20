@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\Type\UserRegisterType;
+use App\Form\Type\User\UserRegisterType;
 use App\Repository\UserRepository;
 use App\Service\VerificationLinkMailerHelper;
 use App\Service\VerificationURLValidator;

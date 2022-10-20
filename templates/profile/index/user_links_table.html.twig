@@ -1,0 +1,25 @@
+<section class="col-lg-{{ colSize }} mt-4">
+    <div class="component">
+        <small class="fw-bold text-black-50">{{ 'profile.your_links'|trans }}</small>
+        <table class="table mt-3">
+            <thead>
+            <tr>
+                <th>Long URL</th>
+                <th colspan="2">Short URL</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for i in 0..10 %}
+            <tr>
+                <td class="small long-url">https://www.test.pl/bardzo-dlugi-link?parametr=true</td>
+                <td class="small ">http://localhost/kv7yl1</td>
+                <td class="table-options">
+                    <a href="#refresh" class="option svg-refresh"></a>
+                    <a href="#delete" class="option svg-delete"></a>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>

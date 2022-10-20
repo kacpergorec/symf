@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
-use App\Form\Type\UserDeleteType;
-use App\Form\Type\UserEditType;
+use App\Entity\Url;
+use App\Form\Type\Url\UrlSubmitType;
+use App\Form\Type\User\UserDeleteType;
+use App\Form\Type\User\UserEditType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,15 +20,22 @@ class ProfileController extends AbstractController
 {
 
     #[Route('/profile', name: 'app_profile')]
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        return $this->render('profile/index.html.twig');
+        $urlForm = $this->createForm(UrlSubmitType::class, new Url(),[
+            'action' => $this->generateUrl('app_shorten')
+        ]);
+
+        return $this->renderForm('profile/index.html.twig', [
+            'urlForm' => $urlForm,
+        ]);
     }
 
     #[Route('/profile/edit', name: 'app_profile_edit')]
     public function edit(EntityManagerInterface $entityManager, Request $request, TranslatorInterface $translator, Security $security): Response
     {
         $user = $security->getUser();
+
 
         $form = $this->createForm(UserEditType::class, $user);
         $form->handleRequest($request);

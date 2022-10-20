@@ -1,9 +1,7 @@
-<div class="py-3">
-    {% for label, messages in app.flashes %}
-        {% for message in messages %}
-            <div class="alert alert-{{ label }}" role="alert">
-                {{ message|raw|markdown_to_html }}
-            </div>
-        {% endfor %}
+{% for label, messages in app.flashes %}
+    {% for message in messages %}
+        <div class="alert alert-{{ label }} my-3" role="alert">
+            {{ message|raw|markdown_to_html }}
+        </div>
     {% endfor %}
-</div>
+{% endfor %}

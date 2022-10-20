@@ -5,3 +5,5 @@ user:
     exists: This {{ label }} is already taken.
   password:
     wrong: Wrong value for your current password.
+  url:
+    no_dot: This URL address does not have a dot.

@@ -4,11 +4,12 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use App\Util\BubbleRenderer;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 
 /**
@@ -49,9 +50,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[ORM\OneToMany(mappedBy: 'User', targetEntity: Url::class)]
+    private Collection $urls;
+
     public function __construct()
     {
         $this->setCreatedAt(new \DateTimeImmutable());
+        $this->urls = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -212,5 +217,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __toString()
     {
         return $this->getFirstname() ?: $this->getUsername();
+    }
+
+    /**
+     * @return Collection<int, Url>
+     */
+    public function getUrls(): Collection
+    {
+        return $this->urls;
+    }
+
+    public function addUrl(Url $url): self
+    {
+        if (!$this->urls->contains($url)) {
+            $this->urls->add($url);
+            $url->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUrl(Url $url): self
+    {
+        if ($this->urls->removeElement($url)) {
+            // set the owning side to null (unless already changed)
+            if ($url->getUser() === $this) {
+                $url->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

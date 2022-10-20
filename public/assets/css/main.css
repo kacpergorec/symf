@@ -24,6 +24,56 @@ p, h1, h2, h3, h4, h5, h6 {
     height: 100%;
 }
 
+.long-url {
+    word-break: break-all;
+}
+
+.long-url:not(:hover) {
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 180px;
+    position: relative;
+}
+
+.long-url:not(:hover)::after {
+    content: "";
+    display: block;
+    background: linear-gradient(90deg, transparent, white);
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50%;
+    height: 100%;
+}
+
+.table-options {
+    display: flex;
+    justify-content: right;
+    gap: 0.5rem;
+}
+
+.option {
+    opacity: 0.5;
+}
+
+.option:hover {
+    opacity: 1;
+}
+
+.svg-delete {
+    content: url('../../assets/images/svg/x.svg');
+    transform: scale(1.15);
+}
+
+.svg-delete:hover{
+    filter: invert(50%) sepia(1) saturate(50) hue-rotate(350deg);
+}
+
+.svg-refresh {
+    content: url('../../assets/images/svg/refresh-ccw.svg');
+    transform: scale(0.9);
+}
+
 /**/
 /* tables */
 /**/
@@ -36,6 +86,6 @@ td, th {
     vertical-align: middle;
 }
 
-tr:last-child td, tr:last-child th{
+tr:last-child td, tr:last-child th {
     border-bottom-width: 0;
 }
