@@ -36,7 +36,6 @@ class ProfileController extends AbstractController
     {
         $user = $security->getUser();
 
-
         $form = $this->createForm(UserEditType::class, $user);
         $form->handleRequest($request);
 

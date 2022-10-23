@@ -6,6 +6,7 @@ use App\Repository\UrlRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
@@ -65,7 +66,7 @@ class Url
         return $this->User;
     }
 
-    public function setUser(?User $User): self
+    public function setUser(?UserInterface $User): self
     {
         $this->User = $User;
 
