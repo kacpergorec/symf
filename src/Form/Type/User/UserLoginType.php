@@ -5,6 +5,7 @@ namespace App\Form\Type\User;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -27,8 +28,17 @@ class UserLoginType extends AbstractType
                 'label' => 'user.password',
                 'required' => true
             ])
+            ->add('_remember_me', CheckboxType::class, [
+                'label' => 'login.remember_me',
+                'mapped' => false,
+                'required' => false
+
+            ])
             ->add('login', SubmitType::class, [
-                'label' => 'login.sign_in'
+                'label' => 'login.sign_in',
+                'attr' => [
+                    'class' => 'btn btn-primary w-full mt-3'
+                ]
             ]);
     }
 

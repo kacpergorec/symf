@@ -19,13 +19,14 @@ class UrlSubmitType extends AbstractType
                     'label' => 'url.enter_url',
                     'default_protocol' => 'https',
                     'attr' => [
-                        'minlength' => '4'
+                        'minlength' => '4',
+                        'placeholder' => 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
                     ]
                 ]
             )
             ->add('add', SubmitType::class, [
                     'label' => 'interface.shorten_link',
-                    'attr' => ['class' => 'btn btn-warning']
+                    'attr' => ['class' => 'btn btn-primary']
                 ]
             );
     }

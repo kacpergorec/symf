@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Url;
+use App\Form\Type\Url\UrlSubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -12,8 +14,12 @@ class HomeController extends AbstractController
     public function index(): Response
     {
 
-        return $this->render('home/index.html.twig', [
-            'controller_name' => 'HomeController',
+        $urlForm = $this->createForm(UrlSubmitType::class, new Url(),[
+            'action' => $this->generateUrl('app_url_shorten')
+        ]);
+
+        return $this->renderForm('home/index.html.twig', [
+            'urlForm' => $urlForm,
         ]);
     }
 }

@@ -1,12 +1,12 @@
 <section class="col-lg-{{ colSize}} mt-4 mt-lg-0">
     <div class="component">
-        <small class="fw-bold text-black-50">{{ 'profile.account_information'|trans }}</small>
-        <table class="table user-info mt-3">
+        <small class="h5">{{ 'profile.account_information'|trans }}</small>
+        <table class="table user-info mt-6">
             {% for key, userInfo in app.user.userInfoArray %}
                 <tr>
                     <td>{{ key }}</td>
                     <td>
-                        {{ userInfo ? userInfo|raw : 'interface.not_defined'|trans|bubble('secondary') }}
+                        {{ userInfo ? userInfo|raw : 'interface.not_defined'|trans|bubble('tertiary') }}
                     </td>
                 </tr>
             {% endfor %}

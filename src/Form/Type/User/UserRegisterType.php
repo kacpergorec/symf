@@ -33,7 +33,10 @@ class UserRegisterType extends AbstractType
                 'required' => true
             ])
             ->add('save', SubmitType::class, [
-                'label' => 'register.sign_up'
+                'label' => 'register.header',
+                'attr' => [
+                    'class' => 'btn btn-primary w-full mt-3'
+                ]
             ]);
     }
 

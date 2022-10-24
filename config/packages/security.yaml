@@ -27,6 +27,9 @@ security:
                 max_attempts: 10
                 interval: '1 minute'
             entry_point: App\Security\AuthenticationEntryPoint
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime:  604800 # 1 week in seconds
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall

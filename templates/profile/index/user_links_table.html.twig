@@ -1,11 +1,13 @@
 <section class="col-lg-{{ colSize }} mt-4">
     <div class="component">
-        <small class="fw-bold text-black-50">{{ 'profile.your_links'|trans }}</small>
-        <table class="table mt-3">
-            <thead>
+        <small class="h5">{{ 'profile.your_links'|trans }}</small>
+        <table class="table table-hover mt-7">
+            <thead class="table-light">
             <tr>
-                <th>Long URL</th>
-                <th colspan="2">Short URL</th>
+                <th>{{ 'url.long_url'|trans }}</th>
+                <th>{{ 'url.short_url'|trans }}</th>
+                <th>{{ 'url.expriration'|trans }}</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -15,9 +17,18 @@
                     <td class="small">
                         <a href="{{ absolute_url(url.shortKey) }}">{{ app.request.httpHost }}/{{ (url.shortKey) }}</a>
                     </td>
+                    <td>6 months</td>
                     <td class="table-options">
-                        <a href="#refresh" class="option svg-refresh"></a>
-                        <a href="{{ path('app_url_delete',{id: url.id}) }}" class="option svg-delete"></a>
+                        <a href="#refresh"
+                           class="option bi bi-arrow-clockwise"
+                           data-bs-toggle="tooltip"
+                           data-bs-title="{{ 'interface.refresh_expiration'|trans }}">
+                        </a>
+                        <a href="{{ path('app_url_delete',{id: url.id}) }}"
+                           class="option bi bi-x-lg link-danger"
+                           data-bs-toggle="tooltip"
+                           data-bs-title="{{ 'interface.delete_forever'|trans }}">
+                        </a>
                     </td>
                 </tr>
             {% endfor %}

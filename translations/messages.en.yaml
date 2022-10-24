@@ -4,13 +4,15 @@ user:
   lastname: Lastname
   password: Password
   email: Email
-  placeholder_username: YourFancyName123
+  placeholder_username: FunnyMonkiUser
 
 login:
   header: Login
   sign_in: Sign in
+  sign_in_to_your_account: Sign in to your account.
   not_verified: Please verify your account before logging in.
   resend_activation_link: Resend activation link.
+  remember_me: Keep me logged in
 
 register:
   header: Register
@@ -34,12 +36,15 @@ profile:
     error: Your account
     type_current_password: Type in your current password to delete your account.
     delete_account: Delete account
-  account_information: ACCOUNT INFORMATION
-  edit_profile_info: EDIT PROFILE INFO
-  your_links: YOUR LINKS
-  easy_shortening: EASY LINK SHORTENING
+  account_information: Account information
+  edit_profile_info: Edit profile info
+  your_links: Your links
 
 url:
+  long_url: Long URL
+  short_url: Short URL
+  token: Token
+  expriration: Expiration
   enter_url: Enter URL to shorten
 
 interface:
@@ -48,4 +53,7 @@ interface:
   logout: Logout
   edit: Edit
   edit_profile: Edit profile
-  shorten_link: Shorten link
+  shorten_link: Short it!
+  refresh: Refresh
+  refresh_expiration: Refresh expiration
+  delete_forever: Delete forever

@@ -9,8 +9,8 @@
     <div class="container">
         <div class="row g-3 col-6 mx-auto my-5">
             <div class="component">
-                <h1 class="mb-4">
-                    {% trans %} register.header {% endtrans %}
+                <h1 class="mb-7">
+                    {% trans %} register.sign_up {% endtrans %}
                 </h1>
 
                 {{ form_start(registerForm) }}
@@ -28,6 +28,10 @@
                 </div>
 
                 {{ form_end(registerForm) }}
+            </div>
+            <div class="my-3">
+                <small>Already registered?</small>
+                <a href="{{ path('app_login') }}" class="text-warning text-sm font-semibold">Sign in</a>
             </div>
         </div>
 

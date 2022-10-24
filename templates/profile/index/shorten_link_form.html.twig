@@ -1,15 +1,16 @@
 <section class="col-lg-{{ colSize }} mt-4">
     <div class="component">
-        <small class="fw-bold text-black-50">{{ 'profile.easy_shortening'|trans }}</small>
-        <div class="py-4">
-            {{ form_start(urlForm) }}
 
-            {{ form_label(urlForm.longUrl) }}
+        <small class="h5">{{ form_label(urlForm.longUrl)|striptags }}</small>
+
+        <div class="pt-6">
+            {{ form_start(urlForm) }}
             <div class="input-group">
                 {{ form_widget(urlForm.longUrl) }}
                 {{ form_widget(urlForm.add) }}
             </div>
             {{ form_end(urlForm) }}
         </div>
+
     </div>
 </section>

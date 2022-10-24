@@ -22,7 +22,7 @@ class UserDeleteType extends AbstractType
             )
             ->add('save', SubmitType::class, [
                     'attr' => ['class' => 'btn btn-outline-danger'],
-                    'label' => 'profile.delete_account'
+                    'label' => 'profile.delete.delete_account'
                 ]
             );
     }

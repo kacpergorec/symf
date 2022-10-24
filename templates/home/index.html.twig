@@ -2,4 +2,42 @@
 
 {% block body %}
 
+    <div class="py-md-32 position-relative">
+        <div class="container-lg max-w-screen-xl">
+            <div class="row align-items-center">
+                <div class="col-lg-6 order-lg-1 ms-auto d-none d-lg-block">
+                    <div class="mb-5 mb-lg-0 w-11/10 position-relative">
+                        <!-- Illustration -->
+                        <div class="svg-fluid position-relative overlap-10  ">
+                            <img src="{{ asset('assets/images/svg/laptop-girl.svg') }}" alt="Girl on a laptop">
+                        </div>
+                        <!-- Decorations -->
+                        <div class="position-absolute bottom-0 start-72 h-64 w-64 mt-n4 transform translate-y-n1/2 translate-x-n1/2 gradient-bottom-right start-purple-400 end-cyan-500 filter blur-100 rounded-4 p-5"></div>
+                    </div>
+                </div>
+                <div class="col-lg-6 order-md-0 px-0">
+                    <h5 class="h5 mb-5 text-uppercase text-warning">
+                        KEEP IT SIMPLE STUPID
+                    </h5>
+                    <h1 class="ls-tight font-bolder display-3 mb-5">
+                        Give your links some love and respect.
+                    </h1>
+                    <p class="lead mb-10">
+                        Simple and reliable Link Shortener. Manage your links. <br>
+                        Customize their names. Generate fancy QR codes.
+                    </p>
+                    <div class="mx-n2 d-flex">
+                        {{ form_start(urlForm) }}
+                        <div class="input-group h-full">
+                            {{ form_widget(urlForm.longUrl) }}
+                            {{ form_widget(urlForm.add) }}
+                        </div>
+                        {{ form_end(urlForm) }}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}

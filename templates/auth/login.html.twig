@@ -6,7 +6,7 @@
 
 {% block body %}
     <div class="container">
-        <div class="row g-3 col-6 mx-auto my-5">
+        <div class="row g-3 col-lg-6 mx-auto my-5">
 
             {% if error %}
                 <div class="alert alert-danger" role="alert">
@@ -15,11 +15,14 @@
             {% endif %}
 
             <div class="component">
-                <h1 class="mb-4">
-                    {% trans %} login.header {% endtrans %}
-                </h1>
-
+                    <h1 class="mb-7">
+                        {% trans %} login.sign_in_to_your_account {% endtrans %}
+                    </h1>
                 {{ form(loginForm) }}
+            </div>
+            <div class="my-3">
+                <small>Don't have an account?</small>
+                <a href="{{ path('app_register') }}" class="text-warning text-sm font-semibold">Sign up</a>
             </div>
         </div>
     </div>

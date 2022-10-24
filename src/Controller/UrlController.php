@@ -21,12 +21,14 @@ class UrlController extends AbstractController
 
         $form->handleRequest($request);
 
+        $user = $security->getUser();
+
         /**
          * @var Url $url
          */
         if ($form->isSubmitted() && $form->isValid()) {
             $url = $form->getData();
-            $url->setUser($security->getUser());
+            $url->setUser($user);
 
 
             while (!$url->hasShortKey()) {
@@ -34,7 +36,7 @@ class UrlController extends AbstractController
                 $uniqueKey = $generator->generate('4');
 
                 //TODO: index shortKey column in the database
-                //TODO: auto increment key length after hitting the limit
+                //TODO  : auto increment key length after hitting the limit
 
                 if (!$urlRepository->findOneBy(['shortKey' => $uniqueKey])) {
                     $url->setShortKey($uniqueKey);
@@ -45,6 +47,10 @@ class UrlController extends AbstractController
             $urlRepository->save($url, true);
 
             $this->addFlash('success', "URL has been shorted to <kbd>{$request->getHttpHost()}/{$url->getShortKey()}</kbd>");
+        }
+
+        if ($user) {
+            return $this->redirectToRoute('app_profile');
         }
 
         return $this->renderForm('shorten/index.html.twig', [
@@ -73,7 +79,7 @@ class UrlController extends AbstractController
         }
 
         //if no link was found
-        return $this->forward(PageController::class.':index', [
+        return $this->forward(PageController::class . ':index', [
             'slug' => $key
         ]);
     }
