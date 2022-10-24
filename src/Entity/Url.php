@@ -6,6 +6,7 @@ use App\Repository\UrlRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -18,7 +19,7 @@ class Url
     #[ORM\Column]
     private ?int $id = null;
 
-//    #[Assert\Regex('/[.]/',message: 'user.url.no_dot')]
+    #[Assert\Regex('/[.]/', message: 'user.url.no_dot')]
     #[Assert\Length(min: 11, max: 2048)]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $longUrl = null;
@@ -30,7 +31,12 @@ class Url
     private ?User $User = null;
 
     #[ORM\Column]
-    private ?DateTimeImmutable $createdAt = null;
+    private ?DateTimeImmutable $createdAt;
+
+    public function __construct()
+    {
+        $this->setCreatedAt(new \DateTimeImmutable());
+    }
 
     public function getId(): ?int
     {
@@ -66,6 +72,11 @@ class Url
         return $this->User;
     }
 
+    public function validateUser(UserInterface $user): bool
+    {
+        return $this->getUser() === $user;
+    }
+
     public function setUser(?UserInterface $User): self
     {
         $this->User = $User;
@@ -84,4 +95,10 @@ class Url
 
         return $this;
     }
+
+    public function hasShortKey(): bool
+    {
+        return (bool)$this->getShortKey();
+    }
+
 }

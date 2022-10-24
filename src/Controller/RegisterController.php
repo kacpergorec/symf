@@ -19,7 +19,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class RegisterController extends AbstractController
 {
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, VerificationLinkMailerHelper $verificationLinkMailerHelper, TranslatorInterface $translator): Response
+    public function register(Request $request, UserRepository $userRepository, UserPasswordHasherInterface $passwordHasher, VerificationLinkMailerHelper $verificationLinkMailerHelper, TranslatorInterface $translator): Response
     {
         $user = new User();
 
@@ -36,13 +36,12 @@ class RegisterController extends AbstractController
 
             $user->setPassword($hashedPassword);
 
-            $entityManager->persist($user);
-            $entityManager->flush();
+            $userRepository->save($user, true);
 
             if ($verificationLinkMailerHelper->send($user)) {
                 $this->addFlash(
                     'info',
-                    $translator->trans('register.activation.sent',[
+                    $translator->trans('register.activation.sent', [
                         '%user%' => $user->getUsername(),
                         '%email%' => $user->getEmail()
                     ])

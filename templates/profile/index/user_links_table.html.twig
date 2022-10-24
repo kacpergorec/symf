@@ -9,15 +9,17 @@
             </tr>
             </thead>
             <tbody>
-            {% for i in 0..10 %}
-            <tr>
-                <td class="small long-url">https://www.test.pl/bardzo-dlugi-link?parametr=true</td>
-                <td class="small ">http://localhost/kv7yl1</td>
-                <td class="table-options">
-                    <a href="#refresh" class="option svg-refresh"></a>
-                    <a href="#delete" class="option svg-delete"></a>
-                </td>
-            </tr>
+            {% for url in app.user.urls %}
+                <tr>
+                    <td class="small long-url">{{ url.longUrl }}</td>
+                    <td class="small">
+                        <a href="{{ absolute_url(url.shortKey) }}">{{ app.request.httpHost }}/{{ (url.shortKey) }}</a>
+                    </td>
+                    <td class="table-options">
+                        <a href="#refresh" class="option svg-refresh"></a>
+                        <a href="{{ path('app_url_delete',{id: url.id}) }}" class="option svg-delete"></a>
+                    </td>
+                </tr>
             {% endfor %}
             </tbody>
         </table>

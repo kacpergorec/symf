@@ -25,17 +25,13 @@ p, h1, h2, h3, h4, h5, h6 {
 }
 
 .long-url {
-    word-break: break-all;
-}
-
-.long-url:not(:hover) {
     white-space: nowrap;
     overflow: hidden;
     max-width: 180px;
     position: relative;
 }
 
-.long-url:not(:hover)::after {
+.long-url::after {
     content: "";
     display: block;
     background: linear-gradient(90deg, transparent, white);
@@ -44,6 +40,7 @@ p, h1, h2, h3, h4, h5, h6 {
     right: 0;
     width: 50%;
     height: 100%;
+    pointer-events: none;
 }
 
 .table-options {

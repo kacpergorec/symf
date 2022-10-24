@@ -23,7 +23,7 @@ class ProfileController extends AbstractController
     public function index(Request $request): Response
     {
         $urlForm = $this->createForm(UrlSubmitType::class, new Url(),[
-            'action' => $this->generateUrl('app_shorten')
+            'action' => $this->generateUrl('app_url_shorten')
         ]);
 
         return $this->renderForm('profile/index.html.twig', [
