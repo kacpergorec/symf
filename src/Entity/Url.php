@@ -118,7 +118,7 @@ class Url
         return $this;
     }
 
-    private function updateExpirationDate($duration = 'P2M') : self
+    public function updateExpirationDate($duration = 'P2M') : self
     {
         $today = new \DateTimeImmutable();
 

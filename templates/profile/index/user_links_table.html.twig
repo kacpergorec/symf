@@ -21,7 +21,7 @@
                         {{ time_diff(url.expirationDate) }}
                     </td>
                     <td class="table-options">
-                        <a href="#refresh"
+                        <a href="{{ path('app_url_refresh',{id: url.id}) }}"
                            class="option bi bi-arrow-clockwise"
                            data-bs-toggle="tooltip"
                            data-bs-title="{{ 'interface.refresh_expiration'|trans }}">

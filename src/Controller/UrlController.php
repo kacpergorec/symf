@@ -15,7 +15,7 @@ use Symfony\Component\Security\Core\Security;
 
 class UrlController extends AbstractController
 {
-    #[Route('/url/shorten', name: 'app_url_shorten')]
+    #[Route('/shorten', name: 'app_url_shorten')]
     public function shorten(Security $security, Request $request, UniqueTokenGenerator $generator, UrlRepository $urlRepository): Response
     {
         $form = $this->createForm(UrlSubmitType::class);
@@ -82,6 +82,20 @@ class UrlController extends AbstractController
         if ($user && ($url = $urlRepository->find($id)) && $url->validateUser($user)) {
             $urlRepository->remove($url, true);
             $this->addFlash('success', 'URL was removed successfully!');
+        }
+
+        return $this->redirectToRoute('app_profile');
+    }
+
+    #[Route('/url/refresh/{id}', name: 'app_url_refresh', requirements: ['id' => '\d+'])]
+    public function refresh($id, UrlRepository $urlRepository, Security $security)
+    {
+        $user = $security->getUser();
+
+        if ($user && ($url = $urlRepository->find($id)) && $url->validateUser($user)) {
+            $url->updateExpirationDate();
+            $urlRepository->save($url, true);
+            $this->addFlash('success', 'URL expiration date was refreshed!');
         }
 
         return $this->redirectToRoute('app_profile');
