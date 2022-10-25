@@ -4,9 +4,6 @@ declare (strict_types=1);
 namespace App\Util\TwigMessage;
 
 
-use JetBrains\PhpStorm\ArrayShape;
-use JetBrains\PhpStorm\Pure;
-
 class TwigLinkMessage extends TwigMessage
 {
 
