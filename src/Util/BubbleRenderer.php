@@ -7,11 +7,6 @@ namespace App\Util;
 class BubbleRenderer
 {
 
-    public function renderBubble(string $value, string $color): string
-    {
-        return "<span class='fw-normal badge bg-opacity-10 border border-opacity-10 border-{$color} bg-{$color} text-{$color}'>{$value}</span>";
-    }
-
     public function renderBubbles(array $items): string
     {
         $html = '';
@@ -22,5 +17,10 @@ class BubbleRenderer
         }
 
         return $html;
+    }
+
+    public function renderBubble(string $value, string $color): string
+    {
+        return "<span class='fw-normal badge bg-opacity-10 border border-opacity-10 border-{$color} bg-{$color} text-{$color}'>{$value}</span>";
     }
 }

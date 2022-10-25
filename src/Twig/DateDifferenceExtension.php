@@ -28,13 +28,6 @@ class DateDifferenceExtension extends AbstractExtension
         ];
     }
 
-    public function diffInDays(DateTimeInterface $since): int
-    {
-        $today = new DateTime();
-
-        return $since->diff($today)->format("%a");
-    }
-
     public function difflevel(DateTimeInterface $since): string
     {
         $days = $this->diffInDays($since);
@@ -48,6 +41,13 @@ class DateDifferenceExtension extends AbstractExtension
         }
 
         return '';
+    }
+
+    public function diffInDays(DateTimeInterface $since): int
+    {
+        $today = new DateTime();
+
+        return $since->diff($today)->format("%a");
     }
 
 }

@@ -75,11 +75,6 @@ class VerificationURLValidator implements ErrorHandlerInterface
         $this->errors[] = $errorMessage;
     }
 
-    public function getErrors(): array
-    {
-        return $this->errors;
-    }
-
     private function setIsValid(bool $value): void
     {
         $this->isValid = $value;
@@ -88,5 +83,10 @@ class VerificationURLValidator implements ErrorHandlerInterface
     public function isValid(): bool
     {
         return $this->isValid;
+    }
+
+    public function getErrors(): array
+    {
+        return $this->errors;
     }
 }

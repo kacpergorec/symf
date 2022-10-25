@@ -25,21 +25,6 @@ class TwigMessage
         $this->setExtra($messageExtra);
     }
 
-    public function getMessage(): string
-    {
-        return $this->message;
-    }
-
-    public function setMessage(string $message): void
-    {
-        $this->message = $message;
-    }
-
-    public function getMessageExtra(): array
-    {
-        return $this->messageExtra;
-    }
-
     /**
      * Safely adds prefix and suffix to the key array for
      * Twig to pass it further to the translation file.
@@ -54,6 +39,21 @@ class TwigMessage
         );
 
         $this->messageExtra = $extra;
+    }
+
+    public function getMessage(): string
+    {
+        return $this->message;
+    }
+
+    public function setMessage(string $message): void
+    {
+        $this->message = $message;
+    }
+
+    public function getMessageExtra(): array
+    {
+        return $this->messageExtra;
     }
 
     public function getTemplatePath(): string

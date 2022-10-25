@@ -44,6 +44,17 @@ class Url
         $this->updateExpirationDate();
     }
 
+    public function updateExpirationDate($duration = 'P7DT1H'): self
+    {
+        $today = new DateTimeImmutable();
+
+        $this->setExpirationDate(
+            $today->add(new DateInterval($duration))
+        );
+
+        return $this;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -61,26 +72,14 @@ class Url
         return $this;
     }
 
-    public function getShortKey(): ?string
+    public function validateUser(UserInterface $user): bool
     {
-        return $this->shortKey;
-    }
-
-    public function setShortKey(string $shortKey): self
-    {
-        $this->shortKey = $shortKey;
-
-        return $this;
+        return $this->getUser() === $user;
     }
 
     public function getUser(): ?User
     {
         return $this->User;
-    }
-
-    public function validateUser(UserInterface $user): bool
-    {
-        return $this->getUser() === $user;
     }
 
     public function setUser(?UserInterface $User): self
@@ -107,6 +106,18 @@ class Url
         return (bool)$this->getShortKey();
     }
 
+    public function getShortKey(): ?string
+    {
+        return $this->shortKey;
+    }
+
+    public function setShortKey(string $shortKey): self
+    {
+        $this->shortKey = $shortKey;
+
+        return $this;
+    }
+
     public function getExpirationDate(): ?DateTimeInterface
     {
         return $this->expirationDate;
@@ -115,17 +126,6 @@ class Url
     public function setExpirationDate(DateTimeInterface $expirationDate): self
     {
         $this->expirationDate = $expirationDate;
-
-        return $this;
-    }
-
-    public function updateExpirationDate($duration = 'P7DT1H'): self
-    {
-        $today = new DateTimeImmutable();
-
-        $this->setExpirationDate(
-            $today->add(new DateInterval($duration))
-        );
 
         return $this;
     }

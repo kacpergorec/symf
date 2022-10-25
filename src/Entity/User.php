@@ -65,6 +65,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->id;
     }
 
+    public function getPersonalData()
+    {
+        if ($this->getFirstname() && $this->getLastname()) {
+            return $this->getFirstname() . ' ' . $this->getLastname();
+        }
+
+        return $this->getUsername();
+    }
+
     public function getFirstname(): ?string
     {
         return $this->firstname;
@@ -75,28 +84,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->firstname = ucfirst($firstname);
 
         return $this;
-    }
-
-    public function getPersonalData()
-    {
-        if ($this->getFirstname() && $this->getLastname()) {
-            return $this->getFirstname() . ' ' . $this->getLastname();
-        }
-
-        return $this->getUsername();
-    }
-
-    public function getUserInfoArray(): array
-    {
-        $bubbleRenderer = new BubbleRenderer();
-
-        return [
-            'First name' => $this->getFirstname(),
-            'Last name' => $this->getLastname(),
-            'Username' => $this->getUsername(),
-            'Email' => $this->getEmail(),
-            'Roles' => $bubbleRenderer->renderBubbles($this->getRoles()),
-        ];
     }
 
     public function getLastname(): ?string
@@ -123,6 +110,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getUserInfoArray(): array
+    {
+        $bubbleRenderer = new BubbleRenderer();
+
+        return [
+            'First name' => $this->getFirstname(),
+            'Last name' => $this->getLastname(),
+            'Username' => $this->getUsername(),
+            'Email' => $this->getEmail(),
+            'Roles' => $bubbleRenderer->renderBubbles($this->getRoles()),
+        ];
+    }
+
     public function getEmail(): ?string
     {
         return $this->email;
@@ -135,16 +135,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getRoles()
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
-
-        return $this;
-    }
-
-    public function setCreatedAt(DateTimeImmutable $createdAt): self
-    {
-        $this->createdAt = $createdAt;
 
         return $this;
     }
@@ -181,6 +183,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->createdAt;
     }
 
+    public function setCreatedAt(DateTimeImmutable $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
     /**
      * @see UserInterface
      */
@@ -188,15 +197,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
-    }
-
-    public function getRoles()
-    {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
     }
 
     /**

@@ -42,6 +42,23 @@ class UniqueTokenGenerator
         $this->setTokenLength($tokenLength);
     }
 
+    public function setAlphabet(string $alphabet): self
+    {
+        $this->alphabet = count_chars($alphabet, 3); // Make sure letters dont repeat
+        $this->alphabetLength = strlen($this->alphabet);
+        $this->setOutcomesCount();
+
+        return $this;
+    }
+
+    public function setTokenLength(int $tokenLength): self
+    {
+        $this->tokenLength = $tokenLength;
+        $this->setOutcomesCount();
+
+        return $this;
+    }
+
     /**
      * @return string
      * Returns a pseudo-unique token that is generated from the given alphabet.
@@ -76,23 +93,6 @@ class UniqueTokenGenerator
         return $this->alphabet[$randomKey];
     }
 
-    public function setAlphabet(string $alphabet): self
-    {
-        $this->alphabet = count_chars($alphabet, 3); // Make sure letters dont repeat
-        $this->alphabetLength = strlen($this->alphabet);
-        $this->setOutcomesCount();
-
-        return $this;
-    }
-
-    public function setTokenLength(int $tokenLength): self
-    {
-        $this->tokenLength = $tokenLength;
-        $this->setOutcomesCount();
-
-        return $this;
-    }
-
     /**
      * This is used when all possible keys at current key length has been used
      * and we need to generate new unique ones.
@@ -108,6 +108,11 @@ class UniqueTokenGenerator
         return $this;
     }
 
+    public function getOutcomesCount(): int
+    {
+        return $this->outcomesCount;
+    }
+
     /**
      * Sets all possible outcomes count of current generation config.
      * It's a fairly simple equation. Count of alphabet chars to the power of current token length.
@@ -119,11 +124,6 @@ class UniqueTokenGenerator
         $this->outcomesCount = strlen($this->alphabet) ** $this->tokenLength;
 
         return $this;
-    }
-
-    public function getOutcomesCount(): int
-    {
-        return $this->outcomesCount;
     }
 
 }
