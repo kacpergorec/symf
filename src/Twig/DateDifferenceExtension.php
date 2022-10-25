@@ -2,6 +2,8 @@
 
 namespace App\Twig;
 
+use DateTime;
+use DateTimeInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -26,14 +28,14 @@ class DateDifferenceExtension extends AbstractExtension
         ];
     }
 
-    public function diffInDays(\DateTimeInterface $since = null): int
+    public function diffInDays(DateTimeInterface $since): int
     {
-        $today = new \DateTime();
+        $today = new DateTime();
 
         return $since->diff($today)->format("%a");
     }
 
-    public function difflevel(\DateTimeInterface $since): string
+    public function difflevel(DateTimeInterface $since): string
     {
         $days = $this->diffInDays($since);
 

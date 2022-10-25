@@ -65,7 +65,7 @@ class UrlController extends AbstractController
 
             $urlRepository->save($url, true);
 
-            if(!$user){
+            if (!$user) {
                 $urlsSessionHandler->add($url);
             }
 

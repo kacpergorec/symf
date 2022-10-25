@@ -14,7 +14,7 @@ class HomeController extends AbstractController
     public function index(): Response
     {
 
-        $urlForm = $this->createForm(UrlSubmitType::class, new Url(),[
+        $urlForm = $this->createForm(UrlSubmitType::class, new Url(), [
             'action' => $this->generateUrl('app_url_shorten')
         ]);
 

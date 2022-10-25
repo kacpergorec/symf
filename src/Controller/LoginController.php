@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\Type\User\UserLoginType;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,6 +35,6 @@ class LoginController extends AbstractController
     #[Route('/logout', name: 'app_logout', methods: ['GET'])]
     public function logout(): Response
     {
-        throw new \Exception('Don\'t forget to activate logout in security.yaml');
+        throw new Exception('Don\'t forget to activate logout in security.yaml');
     }
 }

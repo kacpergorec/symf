@@ -7,5 +7,5 @@ namespace App\Util\TwigMessage;
 interface TwigMessageRendererInterface
 {
 
-    public function render(TwigMessage $message) : string;
+    public function render(TwigMessage $message): string;
 }

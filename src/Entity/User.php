@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use App\Util\BubbleRenderer;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -48,14 +49,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?bool $verified = false;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    private ?DateTimeImmutable $createdAt = null;
 
     #[ORM\OneToMany(mappedBy: 'User', targetEntity: Url::class)]
     private Collection $urls;
 
     public function __construct()
     {
-        $this->setCreatedAt(new \DateTimeImmutable());
+        $this->setCreatedAt(new DateTimeImmutable());
         $this->urls = new ArrayCollection();
     }
 
@@ -141,7 +142,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    public function setCreatedAt(DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
 
@@ -175,7 +176,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->createdAt;
     }

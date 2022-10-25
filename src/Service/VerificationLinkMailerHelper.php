@@ -5,6 +5,7 @@ namespace App\Service;
 
 
 use App\Entity\User;
+use Exception;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
@@ -48,12 +49,12 @@ class VerificationLinkMailerHelper implements ErrorHandlerInterface
         try {
             $this->mailer->send($activationEmail);
             return true;
-        } catch (TransportExceptionInterface $e) {
+        } catch (TransportExceptionInterface) {
             return false;
         }
     }
 
-    public function addError(\Exception $error): void
+    public function addError(Exception $error): void
     {
         if (method_exists($error, 'getReason')) {
             $errorMessage = $error->getReason();

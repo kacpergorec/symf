@@ -43,7 +43,7 @@ class UrlsSessionHandler
 
     private function filterDeletedUrls(): self
     {
-        $urls = (array) $this->session->get('urls');
+        $urls = (array)$this->session->get('urls');
 
         foreach ($urls as $url) {
             if (!$this->urlRepository->find($url->getId())) {

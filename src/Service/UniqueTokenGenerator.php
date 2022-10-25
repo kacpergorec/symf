@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace App\Service;
 
 use App\Exception\NotImplementedHttpException;
+use Exception;
 
 /**
  * Class UIDGenerator.
@@ -68,7 +69,7 @@ class UniqueTokenGenerator
     {
         try {
             $randomKey = random_int(0, $this->alphabetLength - 1);
-        } catch (\Exception $e) {
+        } catch (Exception) {
             throw new NotImplementedHttpException('Randomness entropy is not defined in server');
         }
 

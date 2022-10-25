@@ -6,6 +6,7 @@ namespace App\Service;
 
 use App\Repository\UserRepository;
 use App\Util\UserHandlerTrait;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
@@ -32,8 +33,8 @@ class VerificationURLValidator implements ErrorHandlerInterface
 
         try {
             $user = $this->userRepository->find($request->query->get('id'));
-        } catch (\Exception $e) {
-            $this->addError(new \Exception('Activation link is not valid.'));
+        } catch (Exception) {
+            $this->addError(new Exception('Activation link is not valid.'));
             $this->setIsValid(false);
             return false;
         }
@@ -63,7 +64,7 @@ class VerificationURLValidator implements ErrorHandlerInterface
         return $this->isValid();
     }
 
-    public function addError(\Exception $error): void
+    public function addError(Exception $error): void
     {
         if (method_exists($error, 'getReason')) {
             $errorMessage = $error->getReason();

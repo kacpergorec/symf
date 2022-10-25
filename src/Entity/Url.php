@@ -119,7 +119,7 @@ class Url
         return $this;
     }
 
-    public function updateExpirationDate($duration = 'P7DT1H') : self
+    public function updateExpirationDate($duration = 'P7DT1H'): self
     {
         $today = new DateTimeImmutable();
 
