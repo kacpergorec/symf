@@ -70,6 +70,7 @@ class UrlController extends AbstractController
             }
 
             $this->addFlash('success', "URL has been shorted to <kbd>{$request->getHttpHost()}/{$url->getShortKey()}</kbd>");
+
         }
 
         if ($user) {
@@ -89,7 +90,7 @@ class UrlController extends AbstractController
 
         if ($user && ($url = $urlRepository->find($id)) && $url->validateUser($user)) {
             $urlRepository->remove($url, true);
-            $this->addFlash('success', 'URL was removed successfully!');
+            $this->addFlash('success', 'url.removed');
         }
 
         return $this->redirectToRoute('app_profile');
@@ -101,9 +102,9 @@ class UrlController extends AbstractController
         $user = $security->getUser();
 
         if ($user && ($url = $urlRepository->find($id)) && $url->validateUser($user)) {
-            $url->updateExpirationDate();
+            $url->updateExpirationDate('P1M1D');
             $urlRepository->save($url, true);
-            $this->addFlash('success', 'URL expiration date was refreshed!');
+            $this->addFlash('success', 'url.refreshed');
         }
 
         return $this->redirectToRoute('app_profile');

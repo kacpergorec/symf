@@ -47,7 +47,7 @@ class RegisterController extends AbstractController
                     ])
                 );
             } else {
-                $this->addFlash('warning', $translator->trans('register.activation.not_sent'));
+                $this->addFlash('warning', 'register.activation.not_sent');
             }
 
         }
@@ -58,7 +58,7 @@ class RegisterController extends AbstractController
     }
 
     #[Route('/resend-verification', name: 'app_resend_verification')]
-    public function resend(UserRepository $userRepository, Request $request, VerificationLinkMailerHelper $verificationLinkMailerHelper, TranslatorInterface $translator): Response
+    public function resend(UserRepository $userRepository, Request $request, VerificationLinkMailerHelper $verificationLinkMailerHelper): Response
     {
 
         $username = $request->get('username');
@@ -66,9 +66,9 @@ class RegisterController extends AbstractController
 
         if ($user && !$user->isVerified()) {
             if ($verificationLinkMailerHelper->send($user)) {
-                $this->addFlash('success', $translator->trans('register.activation.sent_again'));
+                $this->addFlash('success', 'register.activation.sent_again');
             } else {
-                $this->addFlash('warning', $translator->trans('register.activation.not_sent'));
+                $this->addFlash('warning', 'register.activation.not_sent');
             }
         } else {
             throw new BadRequestHttpException();
@@ -92,9 +92,9 @@ class RegisterController extends AbstractController
             if (!$user->isVerified()) {
                 $user->setVerified(true);
                 $entityManager->flush();
-                $this->addFlash('success', 'Your account is now active and ready!');
+                $this->addFlash('success', 'account.verified');
             } else {
-                $this->addFlash('info', 'Your account is already verified.');
+                $this->addFlash('info', 'account.already_verified');
             }
 
         } else {

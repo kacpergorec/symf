@@ -15,7 +15,6 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Security;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ProfileController extends AbstractController
 {
@@ -33,7 +32,7 @@ class ProfileController extends AbstractController
     }
 
     #[Route('/profile/edit', name: 'app_profile_edit')]
-    public function edit(EntityManagerInterface $entityManager, Request $request, TranslatorInterface $translator, Security $security): Response
+    public function edit(EntityManagerInterface $entityManager, Request $request, Security $security): Response
     {
         $user = $security->getUser();
 
@@ -46,10 +45,7 @@ class ProfileController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $this->addFlash(
-                'success',
-                $translator->trans('profile.edit.success')
-            );
+            $this->addFlash('success', 'profile.edit.success');
 
             return $this->redirectToRoute('app_profile');
         }
@@ -61,7 +57,7 @@ class ProfileController extends AbstractController
     }
 
     #[Route('/profile/delete', name: 'app_profile_delete')]
-    public function delete(Session $session, TokenStorageInterface $tokenStorage, Request $request, Security $security, EntityManagerInterface $entityManager, TranslatorInterface $translator): Response
+    public function delete(Session $session, TokenStorageInterface $tokenStorage, Request $request, Security $security, EntityManagerInterface $entityManager): Response
     {
         $user = $security->getUser();
 
@@ -81,9 +77,9 @@ class ProfileController extends AbstractController
             try {
                 $entityManager->remove($user);
                 $entityManager->flush();
-                $this->addFlash('success', $translator->trans('profile.delete.success'));
+                $this->addFlash('success', 'profile.delete.success');
             } catch (Exception $e) {
-                $this->addFlash('danger', $translator->trans('profile.delete.error'));
+                $this->addFlash('danger', 'profile.delete.error');
                 throw new $e;
             }
 

@@ -40,13 +40,19 @@ profile:
   edit_profile_info: Edit profile info
   your_links: Your links
 
+account:
+  verified: Your account is now active and ready!
+  already_verified: Your account is already verified.
+
 url:
   long_url: Long URL
   short_url: Short URL
   token: Token
-  expriration: Expiration
+  expiration: Expiration
   enter_url: Enter URL to shorten
-  placeholder : https://www.youtube.com/watch?v=dQw4w9WgXcQ
+  placeholder: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+  removed: URL was removed successfully!
+  refreshed: URL expiration date was refreshed!
 
 interface:
   save_changes: Save changes
