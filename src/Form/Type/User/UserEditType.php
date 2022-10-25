@@ -22,10 +22,6 @@ class UserEditType extends AbstractType
             ->add('lastname', TextType::class, [
                 'label' => 'user.lastname'
             ])
-            ->add('username', TextType::class, [
-                'label' => 'user.username',
-                'required' => true
-            ])
             ->add('email', EmailType::class, [
                 'label' => 'user.email',
                 'required' => true
