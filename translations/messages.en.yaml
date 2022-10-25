@@ -46,6 +46,7 @@ url:
   token: Token
   expriration: Expiration
   enter_url: Enter URL to shorten
+  placeholder : https://www.youtube.com/watch?v=dQw4w9WgXcQ
 
 interface:
   save_changes: Save changes

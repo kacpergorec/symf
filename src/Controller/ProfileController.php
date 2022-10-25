@@ -7,6 +7,7 @@ use App\Form\Type\Url\UrlSubmitType;
 use App\Form\Type\User\UserDeleteType;
 use App\Form\Type\User\UserEditType;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,9 +21,9 @@ class ProfileController extends AbstractController
 {
 
     #[Route('/profile', name: 'app_profile')]
-    public function index(Request $request): Response
+    public function index(): Response
     {
-        $urlForm = $this->createForm(UrlSubmitType::class, new Url(),[
+        $urlForm = $this->createForm(UrlSubmitType::class, new Url(), [
             'action' => $this->generateUrl('app_url_shorten')
         ]);
 
@@ -81,7 +82,7 @@ class ProfileController extends AbstractController
                 $entityManager->remove($user);
                 $entityManager->flush();
                 $this->addFlash('success', $translator->trans('profile.delete.success'));
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->addFlash('danger', $translator->trans('profile.delete.error'));
                 throw new $e;
             }

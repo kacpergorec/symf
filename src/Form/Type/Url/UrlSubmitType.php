@@ -20,7 +20,7 @@ class UrlSubmitType extends AbstractType
                     'default_protocol' => 'https',
                     'attr' => [
                         'minlength' => '4',
-                        'placeholder' => 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+                        'placeholder' => 'url.placeholder'
                     ]
                 ]
             )

@@ -3,10 +3,11 @@
 namespace App\Entity;
 
 use App\Repository\UrlRepository;
+use DateInterval;
 use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -34,12 +35,12 @@ class Url
     private ?DateTimeImmutable $createdAt;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $expirationDate = null;
+    private ?DateTimeInterface $expirationDate = null;
 
 
     public function __construct()
     {
-        $this->setCreatedAt(new \DateTimeImmutable());
+        $this->setCreatedAt(new DateTimeImmutable());
         $this->updateExpirationDate();
     }
 
@@ -106,24 +107,24 @@ class Url
         return (bool)$this->getShortKey();
     }
 
-    public function getExpirationDate(): ?\DateTimeInterface
+    public function getExpirationDate(): ?DateTimeInterface
     {
         return $this->expirationDate;
     }
 
-    public function setExpirationDate(\DateTimeInterface $expirationDate): self
+    public function setExpirationDate(DateTimeInterface $expirationDate): self
     {
         $this->expirationDate = $expirationDate;
 
         return $this;
     }
 
-    public function updateExpirationDate($duration = 'P2M') : self
+    public function updateExpirationDate($duration = 'P7DT1H') : self
     {
-        $today = new \DateTimeImmutable();
+        $today = new DateTimeImmutable();
 
         $this->setExpirationDate(
-            $today->add(new \DateInterval($duration))
+            $today->add(new DateInterval($duration))
         );
 
         return $this;

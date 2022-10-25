@@ -22,7 +22,7 @@ class AuthenticationEntryPoint implements AuthenticationEntryPointInterface
 
     public function start(Request $request, AuthenticationException $authException = null): RedirectResponse
     {
-        $request->getSession()->getFlashBag()->add('danger', 'You have to login in order to access this page.');
+        $request->getSession()->getFlashBag()->add('danger', 'Please login first.');
 
         return new RedirectResponse($this->urlGenerator->generate('app_login'));
     }

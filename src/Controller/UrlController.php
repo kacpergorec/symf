@@ -6,8 +6,8 @@ use App\Entity\Url;
 use App\Form\Type\Url\UrlSubmitType;
 use App\Repository\UrlRepository;
 use App\Service\UniqueTokenGenerator;
+use App\Service\UrlsSessionHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,7 +16,7 @@ use Symfony\Component\Security\Core\Security;
 class UrlController extends AbstractController
 {
     #[Route('/shorten', name: 'app_url_shorten')]
-    public function shorten(Security $security, Request $request, UniqueTokenGenerator $generator, UrlRepository $urlRepository): Response
+    public function shorten(Security $security, Request $request, UniqueTokenGenerator $generator, UrlRepository $urlRepository, UrlsSessionHandler $urlsSessionHandler): Response
     {
         $form = $this->createForm(UrlSubmitType::class);
 
@@ -29,7 +29,11 @@ class UrlController extends AbstractController
          */
         if ($form->isSubmitted() && $form->isValid()) {
             $url = $form->getData();
-            $url->setUser($user);
+
+            if ($user) {
+                $url->setUser($user);
+                $url->updateExpirationDate('P1M');
+            }
 
 
             /**
@@ -52,7 +56,6 @@ class UrlController extends AbstractController
 
                 $uniqueKey = $generator->generate();
 
-                //TODO: index shortKey column in the database
                 if (!$urlRepository->findOneBy(['shortKey' => $uniqueKey])) {
                     $url->setShortKey($uniqueKey);
                 }
@@ -62,6 +65,10 @@ class UrlController extends AbstractController
 
             $urlRepository->save($url, true);
 
+            if(!$user){
+                $urlsSessionHandler->add($url);
+            }
+
             $this->addFlash('success', "URL has been shorted to <kbd>{$request->getHttpHost()}/{$url->getShortKey()}</kbd>");
         }
 
@@ -70,7 +77,8 @@ class UrlController extends AbstractController
         }
 
         return $this->renderForm('shorten/index.html.twig', [
-            'urlForm' => $form
+            'urlForm' => $form,
+            'urls' => $urlsSessionHandler->get()
         ]);
     }
 

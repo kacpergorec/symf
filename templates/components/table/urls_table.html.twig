@@ -1,0 +1,35 @@
+<table class="table table-hover mt-7">
+    <thead class="table-light">
+    <tr>
+        <th>{{ 'url.long_url'|trans }}</th>
+        <th>{{ 'url.short_url'|trans }}</th>
+        <th>{{ 'url.expriration'|trans }}</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for url in urls %}
+        <tr>
+            <td class="small long-url">{{ url.longUrl }}</td>
+            <td class="small">
+                <a href="{{ absolute_url(url.shortKey) }}">{{ app.request.httpHost }}/{{ (url.shortKey) }}</a>
+            </td>
+            <td class="text-{{ url.expirationDate|diff_level }}">
+                {{ time_diff(url.expirationDate) }}
+            </td>
+            <td class="table-options">
+                <a href="{{ path('app_url_refresh',{id: url.id}) }}"
+                   class="option bi bi-arrow-clockwise"
+                   data-bs-toggle="tooltip"
+                   data-bs-title="{{ 'interface.refresh_expiration'|trans }}">
+                </a>
+                <a href="{{ path('app_url_delete',{id: url.id}) }}"
+                   class="option bi bi-x-lg link-danger"
+                   data-bs-toggle="tooltip"
+                   data-bs-title="{{ 'interface.delete_forever'|trans }}">
+                </a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

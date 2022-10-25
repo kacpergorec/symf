@@ -40,7 +40,7 @@ class RegisterController extends AbstractController
 
             if ($verificationLinkMailerHelper->send($user)) {
                 $this->addFlash(
-                    'info',
+                    'success',
                     $translator->trans('register.activation.sent', [
                         '%user%' => $user->getUsername(),
                         '%email%' => $user->getEmail()
