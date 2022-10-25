@@ -7,6 +7,7 @@ use App\Form\Type\Url\UrlSubmitType;
 use App\Repository\UrlRepository;
 use App\Service\UniqueTokenGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -31,17 +32,32 @@ class UrlController extends AbstractController
             $url->setUser($user);
 
 
+            /**
+             * This is a temporary solution.
+             *
+             * The problem here is that when the record limit for given length is peaked,
+             * Every new request, counting will start from here and check a LOT of records.
+             *
+             * The incremented tokenLength value should be stored in the database and incremented once
+             * every time the limit is peaked.
+             */
+            $generator->setTokenLength(3);
+
+            $i = 0;
             while (!$url->hasShortKey()) {
 
-                $uniqueKey = $generator->generate('4');
+                if ($generator->getOutcomesCount() === $i) {
+                    $generator->incrementTokenLength();
+                }
+
+                $uniqueKey = $generator->generate();
 
                 //TODO: index shortKey column in the database
-                //TODO  : auto increment key length after hitting the limit
-
                 if (!$urlRepository->findOneBy(['shortKey' => $uniqueKey])) {
                     $url->setShortKey($uniqueKey);
                 }
 
+                $i++;
             }
 
             $urlRepository->save($url, true);

@@ -33,9 +33,14 @@ class Url
     #[ORM\Column]
     private ?DateTimeImmutable $createdAt;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $expirationDate = null;
+
+
     public function __construct()
     {
         $this->setCreatedAt(new \DateTimeImmutable());
+        $this->updateExpirationDate();
     }
 
     public function getId(): ?int
@@ -99,6 +104,29 @@ class Url
     public function hasShortKey(): bool
     {
         return (bool)$this->getShortKey();
+    }
+
+    public function getExpirationDate(): ?\DateTimeInterface
+    {
+        return $this->expirationDate;
+    }
+
+    public function setExpirationDate(\DateTimeInterface $expirationDate): self
+    {
+        $this->expirationDate = $expirationDate;
+
+        return $this;
+    }
+
+    private function updateExpirationDate($duration = 'P2M') : self
+    {
+        $today = new \DateTimeImmutable();
+
+        $this->setExpirationDate(
+            $today->add(new \DateInterval($duration))
+        );
+
+        return $this;
     }
 
 }

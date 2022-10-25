@@ -17,7 +17,9 @@
                     <td class="small">
                         <a href="{{ absolute_url(url.shortKey) }}">{{ app.request.httpHost }}/{{ (url.shortKey) }}</a>
                     </td>
-                    <td>6 months</td>
+                    <td class="text-{{ url.expirationDate|diff_level }}">
+                        {{ time_diff(url.expirationDate) }}
+                    </td>
                     <td class="table-options">
                         <a href="#refresh"
                            class="option bi bi-arrow-clockwise"

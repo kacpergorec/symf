@@ -25,28 +25,32 @@ class UniqueTokenGenerator
      * This is the default alphabet that UIDGenerator It contains numbers [0-9], and letters [a-z] , [A-Z]
      * @var string
      */
-    private const DEFAULT_ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    private const DEFAULT_ALPHABET = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
     private string $alphabet;
 
     private int $alphabetLength;
 
-    public function __construct(string $alphabet = self::DEFAULT_ALPHABET)
+    private int $tokenLength = 5;
+
+    private int $outcomesCount;
+
+    public function __construct(string $alphabet = self::DEFAULT_ALPHABET, int $tokenLength = 5)
     {
         $this->setAlphabet($alphabet);
+        $this->setTokenLength($tokenLength);
     }
 
     /**
-     * @param int $length
      * @return string
      * Returns a pseudo-unique token that is generated from the given alphabet.
      * Subtracting 1 from alphabet length is needed due to alphabet stringarray last char key.
      */
-    public function generate(int $length = 5): string
+    public function generate(): string
     {
         $token = '';
 
-        for ($i = 0; $i < $length; $i++) {
+        for ($i = 0; $i < $this->tokenLength; $i++) {
 
             $token .= $this->generateRandomLetter();
 
@@ -65,16 +69,60 @@ class UniqueTokenGenerator
         try {
             $randomKey = random_int(0, $this->alphabetLength - 1);
         } catch (\Exception $e) {
-            throw new NotImplementedHttpException('Random');
+            throw new NotImplementedHttpException('Randomness entropy is not defined in server');
         }
 
         return $this->alphabet[$randomKey];
     }
 
-    public function setAlphabet(string $alphabet): void
+    public function setAlphabet(string $alphabet): self
     {
-        $this->alphabet = $alphabet;
-        $this->alphabetLength = strlen($alphabet);
+        $this->alphabet = count_chars($alphabet, 3); // Make sure letters dont repeat
+        $this->alphabetLength = strlen($this->alphabet);
+        $this->setOutcomesCount();
+
+        return $this;
+    }
+
+    public function setTokenLength(int $tokenLength): self
+    {
+        $this->tokenLength = $tokenLength;
+        $this->setOutcomesCount();
+
+        return $this;
+    }
+
+    /**
+     * This is used when all possible keys at current key length has been used
+     * and we need to generate new unique ones.
+     *
+     * @return $this
+     */
+    public function incrementTokenLength(): self
+    {
+        $tokenLength = $this->tokenLength + 1;
+
+        $this->setTokenLength($tokenLength);
+
+        return $this;
+    }
+
+    /**
+     * Sets all possible outcomes count of current generation config.
+     * It's a fairly simple equation. Count of alphabet chars to the power of current token length.
+     *
+     * @return $this
+     */
+    public function setOutcomesCount(): self
+    {
+        $this->outcomesCount = strlen($this->alphabet) ** $this->tokenLength;
+
+        return $this;
+    }
+
+    public function getOutcomesCount(): int
+    {
+        return $this->outcomesCount;
     }
 
 }
