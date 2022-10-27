@@ -11,6 +11,8 @@
         "doctrine/doctrine-bundle": "^2.7",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.13",
+        "endroid/qr-code-bundle": "^4.1",
+        "knplabs/knp-paginator-bundle": "^5.9",
         "knplabs/knp-time-bundle": "^1.20",
         "league/commonmark": "^2.3",
         "phpdocumentor/reflection-docblock": "^5.3",
@@ -55,7 +57,8 @@
         "allow-plugins": {
             "composer/package-versions-deprecated": true,
             "symfony/flex": true,
-            "symfony/runtime": true
+            "symfony/runtime": true,
+            "endroid/installer": true
         },
         "optimize-autoloader": true,
         "preferred-install": {
@@ -100,6 +103,8 @@
         }
     },
     "require-dev": {
+        "roave/security-advisories": "dev-latest"
+        ,
         "phpunit/phpunit": "^9.5",
         "symfony/browser-kit": "5.4.*",
         "symfony/css-selector": "5.4.*",

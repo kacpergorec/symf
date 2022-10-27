@@ -7,6 +7,7 @@ use App\Form\Type\Url\UrlSubmitType;
 use App\Repository\UrlRepository;
 use App\Service\UniqueTokenGenerator;
 use App\Service\UrlsSessionHandler;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,14 +16,17 @@ use Symfony\Component\Security\Core\Security;
 
 class UrlController extends AbstractController
 {
+
     #[Route('/shorten', name: 'app_url_shorten')]
-    public function shorten(Security $security, Request $request, UniqueTokenGenerator $generator, UrlRepository $urlRepository, UrlsSessionHandler $urlsSessionHandler): Response
+    public function shorten(Security $security, Request $request, UniqueTokenGenerator $generator, UrlRepository $urlRepository, UrlsSessionHandler $urlsSessionHandler, PaginatorInterface $paginator): Response
     {
         $form = $this->createForm(UrlSubmitType::class);
 
         $form->handleRequest($request);
 
         $user = $security->getUser();
+
+        $shortedUrl = '';
 
         /**
          * @var Url $url
@@ -69,7 +73,9 @@ class UrlController extends AbstractController
                 $urlsSessionHandler->add($url);
             }
 
-            $this->addFlash('success', "URL has been shorted to <kbd>{$request->getHttpHost()}/{$url->getShortKey()}</kbd>");
+            $shortedUrl = $request->getHttpHost() . '/' . $url->getShortKey();
+
+            $this->addFlash('success', "URL has been shorted to {$shortedUrl}");
 
         }
 
@@ -77,9 +83,16 @@ class UrlController extends AbstractController
             return $this->redirectToRoute('app_profile');
         }
 
+        $pagination = $paginator->paginate(
+            $urlsSessionHandler->get(),
+            $request->query->getInt('page', 1),
+            3
+        );
+
         return $this->renderForm('shorten/index.html.twig', [
             'urlForm' => $form,
-            'urls' => $urlsSessionHandler->get()
+            'shortedUrl' => $shortedUrl,
+            'urls' => $pagination
         ]);
     }
 

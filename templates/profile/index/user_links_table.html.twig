@@ -1,6 +1,5 @@
 <section class="col-lg-{{ colSize }} mt-4">
     <div class="component">
-        <small class="h5">{{ 'profile.your_links'|trans }}</small>
-        {{ include('components/table/urls_table.html.twig',{urls: app.user.urls}) }}
+        {{ include('components/table/urls_table.html.twig',{urls: pagination}) }}
     </div>
 </section>

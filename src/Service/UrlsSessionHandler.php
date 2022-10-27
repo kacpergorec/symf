@@ -34,11 +34,13 @@ class UrlsSessionHandler
     /**
      * @return Url[]
      */
-    public function get(): array
+    public function get($reverseOrder = true): array
     {
         $this->filterDeletedUrls();
 
-        return $this->session->get('urls');
+        $urls = $this->session->get('urls');
+
+        return $reverseOrder ? array_reverse($urls) : $urls;
     }
 
     private function filterDeletedUrls(): self

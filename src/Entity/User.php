@@ -51,7 +51,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?DateTimeImmutable $createdAt = null;
 
-    #[ORM\OneToMany(mappedBy: 'User', targetEntity: Url::class)]
+    #[ORM\OneToMany(mappedBy: 'User', targetEntity: Url::class, cascade: ['persist', 'remove'])]
     private Collection $urls;
 
     public function __construct()
