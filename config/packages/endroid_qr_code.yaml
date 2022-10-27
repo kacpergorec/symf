@@ -1,0 +1,10 @@
+endroid_qr_code:
+  default:
+    data: 'This is customized QR code'
+    size: 300
+    encoding: 'ISO-8859-1'
+    errorCorrectionLevel: 'low'
+    roundBlockSizeMode: 'margin'
+    logoPath: 'assets/images/misc/qr.webp'
+    logoResizeToWidth: 110
+    validateResult: false
