@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Url;
-use App\Form\Type\Url\UrlSubmitType;
+use App\Form\Type\Url\UrlProfileSubmitType;
 use App\Form\Type\User\UserDeleteType;
 use App\Form\Type\User\UserEditType;
 use App\Repository\UserRepository;
@@ -26,7 +26,7 @@ class ProfileController extends AbstractController
     {
 
 
-        $urlForm = $this->createForm(UrlSubmitType::class, new Url(), [
+        $urlForm = $this->createForm(UrlProfileSubmitType::class, new Url(), [
             'action' => $this->generateUrl('app_url_shorten')
         ]);
 
@@ -34,7 +34,7 @@ class ProfileController extends AbstractController
             $pagination = $paginator->paginate(
                 $user->getUrls(),
                 $request->query->getInt('page', 1),
-                3
+                8
             );
         }
 

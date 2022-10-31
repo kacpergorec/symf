@@ -12,6 +12,21 @@ p, h1, h2, h3, h4, h5, h6 {
 }
 
 
+/*
+TEMPORARY DARK-MODE FOR MY PRETTY EYES
+
+html {
+    filter: invert(90%) hue-rotate(180deg);
+}
+
+img {
+    filter: invert(110%) hue-rotate(180deg);
+}
+
+.symf-logo{
+    filter: hue-rotate(0deg);
+}*/
+
 /**/
 /* components */
 /**/

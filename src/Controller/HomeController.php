@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Url;
-use App\Form\Type\Url\UrlSubmitType;
+use App\Form\Type\Url\UrlProfileSubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -14,7 +14,7 @@ class HomeController extends AbstractController
     public function index(): Response
     {
 
-        $urlForm = $this->createForm(UrlSubmitType::class, new Url(), [
+        $urlForm = $this->createForm(UrlProfileSubmitType::class, new Url(), [
             'action' => $this->generateUrl('app_url_shorten')
         ]);
 

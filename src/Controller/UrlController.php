@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Url;
-use App\Form\Type\Url\UrlSubmitType;
+use App\Form\Type\Url\UrlProfileSubmitType;
 use App\Repository\UrlRepository;
 use App\Service\UniqueTokenGenerator;
 use App\Service\UrlsSessionHandler;
@@ -20,11 +20,15 @@ class UrlController extends AbstractController
     #[Route('/shorten', name: 'app_url_shorten')]
     public function shorten(Security $security, Request $request, UniqueTokenGenerator $generator, UrlRepository $urlRepository, UrlsSessionHandler $urlsSessionHandler, PaginatorInterface $paginator): Response
     {
-        $form = $this->createForm(UrlSubmitType::class);
+        $form = $this->createForm(UrlProfileSubmitType::class);
 
         $form->handleRequest($request);
 
-        $user = $security->getUser();
+        if ($user = $security->getUser()) {
+            $urls = $user->getUrls();
+        } else {
+            $urls = $urlsSessionHandler->get();
+        }
 
         $shortedUrl = '';
 
@@ -79,14 +83,10 @@ class UrlController extends AbstractController
 
         }
 
-        if ($user) {
-            return $this->redirectToRoute('app_profile');
-        }
-
         $pagination = $paginator->paginate(
-            $urlsSessionHandler->get(),
+            $urls,
             $request->query->getInt('page', 1),
-            3
+            8
         );
 
         return $this->renderForm('shorten/index.html.twig', [
@@ -127,7 +127,8 @@ class UrlController extends AbstractController
     public function urlRedirect($key, UrlRepository $urlRepository): Response
     {
         if (($url = $urlRepository->findOneBy(['shortKey' => $key]))) {
-            return $this->redirect($url->getLongUrl(), '301');
+//            return $this->redirect($url->getLongUrl(), '301');
+            $this->addFlash('success', "found {$url->getLongUrl()}");
         }
 
         //if no link was found

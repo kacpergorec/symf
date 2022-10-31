@@ -5,7 +5,6 @@ namespace App\Form\Type\User;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -21,10 +20,6 @@ class UserEditType extends AbstractType
             ])
             ->add('lastname', TextType::class, [
                 'label' => 'user.lastname'
-            ])
-            ->add('email', EmailType::class, [
-                'label' => 'user.email',
-                'required' => true
             ])
             ->add('save', SubmitType::class, [
                 'label' => 'interface.save_changes'
