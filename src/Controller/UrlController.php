@@ -126,9 +126,11 @@ class UrlController extends AbstractController
     #[Route('/{key}', name: 'app_url_redirect')]
     public function urlRedirect($key, UrlRepository $urlRepository): Response
     {
+
         if (($url = $urlRepository->findOneBy(['shortKey' => $key]))) {
-//            return $this->redirect($url->getLongUrl(), '301');
-            $this->addFlash('success', "found {$url->getLongUrl()}");
+            //301 redirect is apparently healthiest for SEO
+            //source: https://blog.rebrandly.com/301-redirect/
+            return $this->redirect($url->getLongUrl(), '301');
         }
 
         //if no link was found
