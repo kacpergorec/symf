@@ -21,6 +21,6 @@ class BubbleRenderer
 
     public function renderBubble(string $value, string $color): string
     {
-        return "<span class='fw-normal badge bg-opacity-10 border border-opacity-10 border-{$color} bg-{$color} text-{$color}'>{$value}</span>";
+        return "<span class='me-1 d-inline-block fw-normal badge bg-opacity-10 border border-opacity-10 border-{$color} bg-{$color} text-{$color}'>{$value}</span>";
     }
 }

@@ -7,7 +7,7 @@ namespace App\Factory\User;
 use App\Entity\User;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class AdminUserFactory extends UserFactory
+class AdminUserFactory extends VerifiedUserFactory
 {
     protected const ROLE_ADMIN = 'ROLE_ADMIN';
 
@@ -24,7 +24,8 @@ class AdminUserFactory extends UserFactory
 
         $user->updateFieldsIfEmpty([
             'username' => $this->defaultAdminUsername,
-            'password' => $this->defaultAdminPassword,
+            'email' => $this->defaultAdminUsername,
+            'password' => $this->hashPassword($user, $this->defaultAdminPassword),
         ]);
 
         return $user;
@@ -36,7 +37,7 @@ class AdminUserFactory extends UserFactory
 
         $user->updateFieldsIfEmpty([
             'username' => $this->defaultAdminUsername,
-            'password' => $this->defaultAdminPassword,
+            'password' => $this->hashPassword($user, $this->defaultAdminPassword),
         ]);
 
         $user->addRole(self::ROLE_ADMIN);

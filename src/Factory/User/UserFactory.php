@@ -13,12 +13,14 @@ class UserFactory extends AbstractUserFactory
     {
         $user = new User();
 
-        $hashedPassword = $this->hashPassword($user, $plainPassword);
+        if ($username && $email && $plainPassword) {
+            $hashedPassword = $this->hashPassword($user, $plainPassword);
 
-        $user
-            ->setUsername($username)
-            ->setEmail($email)
-            ->setPassword($hashedPassword);
+            $user
+                ->setUsername($username)
+                ->setEmail($email)
+                ->setPassword($hashedPassword);
+        }
 
         return $user;
     }

@@ -2,6 +2,9 @@
 
 namespace App\Command;
 
+use App\Factory\User\AdminUserFactory;
+use App\Repository\UserRepository;
+use InvalidArgumentException;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
@@ -16,6 +19,17 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class SymfAddAdminCommand extends Command
 {
+
+    private AdminUserFactory $adminUserFactory;
+    private UserRepository $userRepository;
+
+    public function __construct(AdminUserFactory $adminUserFactory, UserRepository $userRepository)
+    {
+        parent::__construct();
+        $this->adminUserFactory = $adminUserFactory;
+        $this->userRepository = $userRepository;
+    }
+
     protected function configure(): void
     {
         $this
@@ -25,16 +39,24 @@ class SymfAddAdminCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $argsCount = count(array_filter($input->getArguments()));
+
+        if ($argsCount !== 1 && $argsCount !== 3) {
+            throw new InvalidArgumentException("This commands accepts only 0 or 2 arguments. [username, password] or [none]");
+        }
+
         $io = new SymfonyStyle($input, $output);
 
-        $username = $input->getArgument('username') ?: 'admin';
-        $password = $input->getArgument('password') ?: 'admin';
-        $email = "{$username}@symf.com";
+        $username = (string)$input->getArgument('username');
+        $password = (string)$input->getArgument('password');
+
+        $user = $this->adminUserFactory->createNew($username, $username, $password);
+
+        $this->userRepository->save($user, true);
 
         $table = new Table($output);
-        $table->setHeaderTitle('Your admin login credentials');
-        $table->setHeaders(['email','username','password']);
-        $table->addRow([$email,$username,$password]);
+        $table->setHeaders(['username', 'password']);
+        $table->addRow([$user->getUsername(), $password ?: '<comment>DEFAULT VALUE [.env]</comment>']);
         $table->render();
 
         return Command::SUCCESS;
