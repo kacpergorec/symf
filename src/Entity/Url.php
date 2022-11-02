@@ -77,6 +77,11 @@ class Url
         return $this->getUser() === $user;
     }
 
+    public function getShortUrl()
+    {
+        return '/' . $this->getShortKey();
+    }
+
     public function getUser(): ?User
     {
         return $this->User;
