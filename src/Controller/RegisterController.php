@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Factory\User\AdminUserFactory;
 use App\Form\Type\User\UserRegisterType;
 use App\Repository\UserRepository;
 use App\Service\VerificationLinkMailerHelper;
@@ -12,14 +13,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class RegisterController extends AbstractController
 {
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserRepository $userRepository, UserPasswordHasherInterface $passwordHasher, VerificationLinkMailerHelper $verificationLinkMailerHelper, TranslatorInterface $translator): Response
+    public function register(Request $request, UserRepository $userRepository, AdminUserFactory $userFactory, VerificationLinkMailerHelper $verificationLinkMailerHelper, TranslatorInterface $translator): Response
     {
         $user = new User();
 
@@ -29,12 +29,7 @@ class RegisterController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
 
-            $hashedPassword = $passwordHasher->hashPassword(
-                $user,
-                $user->getPassword()
-            );
-
-            $user->setPassword($hashedPassword);
+            $userFactory->createNewFromEntity($user);
 
             $userRepository->save($user, true);
 

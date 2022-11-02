@@ -3,6 +3,7 @@ user:
   firstname: Firstname
   lastname: Lastname
   password: Password
+  roles: Roles
   email: Email
   placeholder_username: FunnyMonkiUser
 

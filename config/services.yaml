@@ -28,3 +28,9 @@ services:
         arguments:
             $appMailFrom: '%env(APP_MAIL_FROM)%'
 
+    App\Factory\User\AdminUserFactory:
+        arguments:
+            $defaultAdminUsername: '%env(APP_ADMIN_USERNAME)%'
+            $defaultAdminPassword: '%env(APP_ADMIN_PASSWORD)%'
+
+

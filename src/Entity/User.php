@@ -115,11 +115,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $bubbleRenderer = new BubbleRenderer();
 
         return [
-            'First name' => $this->getFirstname(),
-            'Last name' => $this->getLastname(),
-            'Username' => $this->getUsername(),
-            'Email' => $this->getEmail(),
-            'Roles' => $bubbleRenderer->renderBubbles($this->getRoles()),
+            'user.firstname' => $this->getFirstname(),
+            'user.lastname' => $this->getLastname(),
+            'user.username' => $this->getUsername(),
+            'user.email' => $this->getEmail(),
+            'user.roles' => $bubbleRenderer->renderBubbles($this->getRoles()),
         ];
     }
 
@@ -144,6 +144,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return array_unique($roles);
     }
 
+    public function addRole(string $role): self
+    {
+        $this->roles[] = $role;
+
+        return $this;
+    }
+
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
@@ -157,6 +164,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getPassword(): string
     {
         return $this->password;
+    }
+
+    public function hasPassword(): bool
+    {
+        return (bool)$this->password;
     }
 
     public function setPassword(string $password): self
@@ -248,5 +260,43 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+    }
+
+    /**
+     *  Updates given fields of User.
+     *
+     *  TODO: Make sure it is okay to throw Exceptions via Entities.
+     */
+    public function updateFields(array $fields): self
+    {
+        foreach ($fields as $propertyName => $field) {
+            $method = "set" . ucfirst(strtolower($propertyName));
+
+            if (!method_exists($this, $method)) {
+                throw new \Exception("Method {$method} does not exist.");
+            }
+
+            $this->$method($field);
+        }
+
+        return $this;
+    }
+
+    /**
+     *  Updates User fields but only if all of them are empty.
+     */
+    public function updateFieldsIfEmpty(array $fields): self
+    {
+        $usedProperties = array_filter(get_object_vars($this));
+
+        //If given fields are not empty - dont update the user.
+        if (array_intersect(
+            array_keys($fields),
+            array_keys($usedProperties)
+        )) {
+            return $this;
+        }
+
+        return $this->updateFields($fields);
     }
 }
