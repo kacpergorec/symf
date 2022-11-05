@@ -11,10 +11,9 @@ use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
-    name: 'symf:add-admin',
+    name: 'symf:add:admin',
     description: 'Generates and inserts an admin into a database',
 )]
 class SymfAddAdminCommand extends Command
@@ -44,8 +43,6 @@ class SymfAddAdminCommand extends Command
         if ($argsCount !== 1 && $argsCount !== 3) {
             throw new InvalidArgumentException("This commands accepts only 0 or 2 arguments. [username, password] or [none]");
         }
-
-        $io = new SymfonyStyle($input, $output);
 
         $username = (string)$input->getArgument('username');
         $password = (string)$input->getArgument('password');

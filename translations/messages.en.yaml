@@ -54,6 +54,7 @@ url:
   placeholder: https://www.youtube.com/watch?v=dQw4w9WgXcQ
   removed: URL was removed successfully!
   refreshed: URL expiration date was refreshed!
+  transfered: "Hello! %urlCount% URL(s) has been transfered to your account."
 
 interface:
   save_changes: Save changes
@@ -65,3 +66,4 @@ interface:
   refresh: Refresh
   refresh_expiration: Refresh expiration
   delete_forever: Delete forever
+  qr_code: QR Code

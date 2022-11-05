@@ -8,6 +8,7 @@ use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use RuntimeException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -240,6 +241,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->urls;
     }
 
+    public function getUrlKeys(): array
+    {
+        return array_map(
+            static fn($url) => $url->getShortKey(),
+            $this->getUrls()->toArray()
+        );
+    }
+
     public function addUrl(Url $url): self
     {
         if (!$this->urls->contains($url)) {
@@ -273,7 +282,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             $method = "set" . ucfirst(strtolower($propertyName));
 
             if (!method_exists($this, $method)) {
-                throw new \Exception("Method {$method} does not exist.");
+                throw new RuntimeException("Method {$method} does not exist.");
             }
 
             $this->$method($field);

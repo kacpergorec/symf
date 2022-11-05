@@ -43,6 +43,14 @@ class UrlsSessionHandler
         return $reverseOrder ? array_reverse($urls) : $urls;
     }
 
+    public function getKeys(): array
+    {
+        return array_map(
+            static fn($url) => $url->getShortKey(),
+            $this->get()
+        );
+    }
+
     private function filterDeletedUrls(): self
     {
         $urls = (array)$this->session->get('urls');

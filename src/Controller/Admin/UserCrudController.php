@@ -28,16 +28,7 @@ class UserCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
-        $actionDelete = Action::new('delete')
-            ->displayIf(function ($entity) {
-                return $this->getUser() !== $entity;
-            })
-            ->setCssClass('text-danger')
-            ->linkToCrudAction(Action::DELETE);
-
         return $actions
-            ->remove(Crud::PAGE_INDEX, Action::DELETE)
-            ->add(Crud::PAGE_INDEX, $actionDelete)
             ->add(Crud::PAGE_INDEX, Action::DETAIL);
     }
 

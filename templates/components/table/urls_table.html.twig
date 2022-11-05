@@ -26,6 +26,10 @@
                 {{ time_diff(url.expirationDate) }}
             </td>
             <td class="table-options">
+                <a href="{{ qr_code_url(absolute_url(url.shortKey)) }}"
+                   class="option bi bi-qr-code-scan"
+                   data-bs-toggle="tooltip"
+                   data-bs-title="{{ 'interface.qr_code'|trans }}"></a>
                 <a href="{{ path('app_url_refresh',{id: url.id}) }}"
                    class="option bi bi-arrow-clockwise"
                    data-bs-toggle="tooltip"

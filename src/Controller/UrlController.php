@@ -3,14 +3,16 @@
 namespace App\Controller;
 
 use App\Entity\Url;
+use App\Entity\User;
 use App\Form\Type\Url\UrlProfileSubmitType;
 use App\Repository\UrlRepository;
-use App\Service\UniqueTokenGenerator;
+use App\Service\EntityUniqueTokenGenerator;
 use App\Service\UrlsSessionHandler;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\UrlHelper;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 
@@ -18,14 +20,25 @@ class UrlController extends AbstractController
 {
 
     #[Route('/shorten', name: 'app_url_shorten')]
-    public function shorten(Security $security, Request $request, UniqueTokenGenerator $generator, UrlRepository $urlRepository, UrlsSessionHandler $urlsSessionHandler, PaginatorInterface $paginator): Response
+    public function shorten(
+        UrlHelper $urlHelper,
+        Security $security,
+        Request $request,
+        EntityUniqueTokenGenerator $shortKeyGenerator,
+        UrlRepository $urlRepository,
+        UrlsSessionHandler $urlsSessionHandler,
+        PaginatorInterface $paginator
+    ): Response
     {
         $form = $this->createForm(UrlProfileSubmitType::class);
 
         $form->handleRequest($request);
 
+        /**
+         * @var $user User
+         */
         if ($user = $security->getUser()) {
-            $urls = $user->getUrls();
+            $urls = array_reverse($user->getUrls()->toArray());
         } else {
             $urls = $urlsSessionHandler->get();
         }
@@ -43,33 +56,9 @@ class UrlController extends AbstractController
                 $url->updateExpirationDate('P1M');
             }
 
+            $shortKey = $shortKeyGenerator->generateUniqueToken(1, $urlRepository);
 
-            /**
-             * This is a temporary solution.
-             *
-             * The problem here is that when the record limit for given length is peaked,
-             * Every new request, counting will start from here and check a LOT of records.
-             *
-             * The incremented tokenLength value should be stored in the database and incremented once
-             * every time the limit is peaked.
-             */
-            $generator->setTokenLength(3);
-
-            $i = 0;
-            while (!$url->hasShortKey()) {
-
-                if ($generator->getOutcomesCount() === $i) {
-                    $generator->incrementTokenLength();
-                }
-
-                $uniqueKey = $generator->generate();
-
-                if (!$urlRepository->findOneBy(['shortKey' => $uniqueKey])) {
-                    $url->setShortKey($uniqueKey);
-                }
-
-                $i++;
-            }
+            $url->setShortKey($shortKey);
 
             $urlRepository->save($url, true);
 
@@ -77,9 +66,9 @@ class UrlController extends AbstractController
                 $urlsSessionHandler->add($url);
             }
 
-            $shortedUrl = $request->getHttpHost() . '/' . $url->getShortKey();
+            $shortedUrl = $urlHelper->getAbsoluteUrl($url->getShortKey());
 
-            $this->addFlash('success', "URL has been shorted to {$shortedUrl}");
+            $this->addFlash('success', "URL has been shorted to <a href='{$shortedUrl}'>{$shortedUrl}</a>");
 
         }
 
@@ -115,7 +104,7 @@ class UrlController extends AbstractController
         $user = $security->getUser();
 
         if ($user && ($url = $urlRepository->find($id)) && $url->validateUser($user)) {
-            $url->updateExpirationDate('P1M1D');
+            $url->updateExpirationDate('P1M29D');
             $urlRepository->save($url, true);
             $this->addFlash('success', 'url.refreshed');
         }
