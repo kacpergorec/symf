@@ -37,14 +37,18 @@ class Url
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?DateTimeInterface $expirationDate = null;
 
+    const THREE_MONTHS = 'P3M';
+    const ONE_MONTH = 'P1M';
+    const ONE_WEEK = 'P1M';
+    const ONE_MINUTE = 'PT1M';
 
     public function __construct()
     {
         $this->setCreatedAt(new DateTimeImmutable());
-        $this->updateExpirationDate();
+        $this->updateExpirationDate(self::ONE_WEEK);
     }
 
-    public function updateExpirationDate($duration = 'P7DT1H'): self
+    public function updateExpirationDate($duration): self
     {
         $today = new DateTimeImmutable();
 

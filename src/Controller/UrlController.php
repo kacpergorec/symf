@@ -37,11 +37,7 @@ class UrlController extends AbstractController
         /**
          * @var $user User
          */
-        if ($user = $security->getUser()) {
-            $urls = array_reverse($user->getUrls()->toArray());
-        } else {
-            $urls = $urlsSessionHandler->get();
-        }
+        $user = $security->getUser();
 
         $shortedUrl = '';
 
@@ -53,7 +49,7 @@ class UrlController extends AbstractController
 
             if ($user) {
                 $url->setUser($user);
-                $url->updateExpirationDate('P1M');
+                $url->updateExpirationDate(Url::ONE_MONTH);
             }
 
             $shortKey = $shortKeyGenerator->generateUniqueToken(1, $urlRepository);
@@ -72,11 +68,18 @@ class UrlController extends AbstractController
 
         }
 
+        if ($user) {
+            $urls = array_reverse($user->getUrls()->toArray());
+        } else {
+            $urls = $urlsSessionHandler->get();
+        }
+
         $pagination = $paginator->paginate(
             $urls,
             $request->query->getInt('page', 1),
             8
         );
+
 
         return $this->renderForm('shorten/index.html.twig', [
             'urlForm' => $form,
@@ -104,7 +107,7 @@ class UrlController extends AbstractController
         $user = $security->getUser();
 
         if ($user && ($url = $urlRepository->find($id)) && $url->validateUser($user)) {
-            $url->updateExpirationDate('P1M29D');
+            $url->updateExpirationDate(Url::ONE_MONTH);
             $urlRepository->save($url, true);
             $this->addFlash('success', 'url.refreshed');
         }

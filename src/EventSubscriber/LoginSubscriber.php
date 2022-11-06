@@ -8,7 +8,7 @@ use App\Entity\User;
 use App\Util\TwigMessage\TwigLinkMessage;
 use App\Util\TwigMessage\TwigMessage;
 use App\Util\TwigMessage\TwigMessageRendererInterface;
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -25,7 +25,7 @@ class LoginSubscriber implements EventSubscriberInterface
         private TwigMessageRendererInterface $twigMessageRenderer,
         private RouterInterface $router,
         private RequestStack $requestStack,
-        private EntityManagerInterface $entityManager,
+        private ManagerRegistry $doctrine,
         private FlashBagInterface $flashBag,
     )
     {
@@ -72,17 +72,23 @@ class LoginSubscriber implements EventSubscriberInterface
 
         if ($urls = $session->get('urls')) {
 
+            $entityManager = $this->doctrine->getManager();
+            $repository = $entityManager->getRepository(Url::class);
+
             /**@var Url $url ; */
             foreach ($urls as $url) {
-                $url->setUser($user);
-                $this->entityManager->flush();
+                if($url = $repository->find($url->getId())){
+                    $url->setUser($user);
+                }
             }
+
+            $entityManager->flush();
 
             $session->remove('urls');
 
             $message = new TwigMessage(
                 'url.transfered',
-                ['urlCount' => (string) count($urls)]
+                ['urlCount' => (string)count($urls)]
             );
 
             $this->flashBag->add(
