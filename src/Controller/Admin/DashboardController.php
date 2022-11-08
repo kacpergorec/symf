@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Page;
 use App\Entity\Url;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -39,8 +40,12 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
+        yield MenuItem::section('Url shortener');
         yield MenuItem::linkToCrud('Users', 'fas fa-user', User::class);
         yield MenuItem::linkToCrud('Urls', 'fas fa-list', Url::class);
+
+        yield MenuItem::section('CMS');
+        yield MenuItem::linkToCrud('Pages', 'far fa-file-lines', Page::class);
     }
 
 }

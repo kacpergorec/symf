@@ -55,10 +55,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'User', targetEntity: Url::class, cascade: ['persist', 'remove'])]
     private Collection $urls;
 
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Page::class)]
+    private Collection $pages;
+
     public function __construct()
     {
         $this->setCreatedAt(new DateTimeImmutable());
         $this->urls = new ArrayCollection();
+        $this->pages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -307,5 +311,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this->updateFields($fields);
+    }
+
+    /**
+     * @return Collection<int, Page>
+     */
+    public function getPages(): Collection
+    {
+        return $this->pages;
+    }
+
+    public function addPage(Page $page): self
+    {
+        if (!$this->pages->contains($page)) {
+            $this->pages->add($page);
+            $page->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removePage(Page $page): self
+    {
+        if ($this->pages->removeElement($page)) {
+            // set the owning side to null (unless already changed)
+            if ($page->getAuthor() === $this) {
+                $page->setAuthor(null);
+            }
+        }
+
+        return $this;
     }
 }

@@ -52,7 +52,7 @@ class UrlController extends AbstractController
                 $url->updateExpirationDate(Url::ONE_MONTH);
             }
 
-            $shortKey = $shortKeyGenerator->generateUniqueToken(1, $urlRepository);
+            $shortKey = $shortKeyGenerator->generateUniqueToken(4, $urlRepository);
 
             $url->setShortKey($shortKey);
 
