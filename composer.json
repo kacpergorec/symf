@@ -13,6 +13,7 @@
         "doctrine/orm": "^2.13",
         "easycorp/easyadmin-bundle": "^4.4",
         "endroid/qr-code-bundle": "^4.1",
+        "knplabs/knp-menu-bundle": "^3.2",
         "knplabs/knp-paginator-bundle": "^5.9",
         "knplabs/knp-time-bundle": "^1.20",
         "league/commonmark": "^2.3",
