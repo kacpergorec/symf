@@ -67,3 +67,7 @@ interface:
   refresh_expiration: Refresh expiration
   delete_forever: Delete forever
   qr_code: QR Code
+  copyright: © 2021 Symf, Inc
+
+messages:
+  removed_expired_urls: "%count% URLs have been expired and removed"

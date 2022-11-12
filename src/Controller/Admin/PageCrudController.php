@@ -45,14 +45,15 @@ class PageCrudController extends AbstractCrudController
             ,
             TextField::new('title'),
             TextField::new('slug')
-                ->hideOnForm()
-                ->setHelp('Your pages are identified by slugs. Be careful and sure when changing them.')
+                ->onlyOnDetail()
             ,
             UrlField::new('redirectUrl')
+                ->hideOnIndex()
                 ->setLabel('Redirect to')
                 ->setHelp('Leave empty for no redirect'),
             TextEditorField::new('content')
-                ->setTemplatePath('admin/crud/field/text_editor.html.twig'),
+                ->setTemplatePath('admin/crud/field/text_editor.html.twig')
+            ,
             AssociationField::new('author')
                 ->hideOnForm(),
             BooleanField::new('inMenu'),
@@ -84,12 +85,6 @@ class PageCrudController extends AbstractCrudController
         parent::persistEntity($entityManager, $page);
     }
 
-    public function updateEntity(EntityManagerInterface $entityManager, $page): void
-    {
-        $this->setSlug($entityManager, $page);
-
-        parent::updateEntity($entityManager, $page);
-    }
 
     public function deleteEntity(EntityManagerInterface $entityManager, $page): void
     {
@@ -105,7 +100,6 @@ class PageCrudController extends AbstractCrudController
     private function setSlug(EntityManagerInterface $entityManager, Page $page): void
     {
         $slugger = new AsciiSlugger();
-
 
         $slug = $maybeSlug = $slugger->slug(
             mb_strtolower($page->getTitle())

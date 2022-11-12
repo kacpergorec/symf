@@ -1,7 +1,5 @@
 <ul class="nav col-12 col-lg-4 my-2 justify-content-center d-none d-lg-flex">
-    <li><a href="/" class="nav-link px-2">Home</a></li>
-    <li><a href="features" class="nav-link px-2">Features</a></li>
-    <li><a href="pricing" class="nav-link px-2">Pricing</a></li>
-    <li><a href="faq" class="nav-link px-2">FAQs</a></li>
-    <li><a href="about" class="nav-link px-2">About</a></li>
+    {% for menuItem in knp_menu_get('main') %}
+      <li><a href="{{ menuItem.uri }}" class="nav-link px-2">{{ menuItem.name }}</a></li>
+    {% endfor %}
 </ul>

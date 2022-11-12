@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Factory\User\AdminUserFactory;
+use App\Factory\User\UserFactory;
 use App\Form\Type\User\UserRegisterType;
 use App\Repository\UserRepository;
 use App\Service\VerificationLinkMailerHelper;
@@ -19,7 +20,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class RegisterController extends AbstractController
 {
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserRepository $userRepository, AdminUserFactory $userFactory, VerificationLinkMailerHelper $verificationLinkMailerHelper, TranslatorInterface $translator): Response
+    public function register(Request $request, UserRepository $userRepository, UserFactory $userFactory, VerificationLinkMailerHelper $verificationLinkMailerHelper, TranslatorInterface $translator): Response
     {
         $user = new User();
 
