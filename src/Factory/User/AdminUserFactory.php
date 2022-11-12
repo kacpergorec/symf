@@ -31,6 +31,11 @@ class AdminUserFactory extends VerifiedUserFactory
         return $user;
     }
 
+    public function createDefault() : User
+    {
+        return $this->createNew('', '', '');
+    }
+
     public function createNewFromEntity(User $user): User
     {
         $user = parent::createNewFromEntity($user);

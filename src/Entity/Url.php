@@ -39,13 +39,12 @@ class Url
 
     const THREE_MONTHS = 'P3M';
     const ONE_MONTH = 'P1M';
-    const ONE_WEEK = 'P1M';
     const ONE_MINUTE = 'PT0M5S';
 
     public function __construct()
     {
         $this->setCreatedAt(new DateTimeImmutable());
-        $this->updateExpirationDate(self::ONE_MINUTE);
+        $this->updateExpirationDate(self::ONE_MONTH);
     }
 
     public function updateExpirationDate($duration): self
@@ -137,6 +136,11 @@ class Url
         $this->expirationDate = $expirationDate;
 
         return $this;
+    }
+
+    public function isExpired() : bool
+    {
+        return $this->getExpirationDate() <= new DateTimeImmutable();
     }
 
 }

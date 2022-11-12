@@ -24,7 +24,7 @@ class UrlController extends AbstractController
         UrlHelper $urlHelper,
         Security $security,
         Request $request,
-        EntityUniqueTokenGenerator $shortKeyGenerator,
+        EntityUniqueTokenGenerator $tokenGenerator,
         UrlRepository $urlRepository,
         UrlsSessionHandler $urlsSessionHandler,
         PaginatorInterface $paginator
@@ -52,7 +52,7 @@ class UrlController extends AbstractController
                 $url->updateExpirationDate(Url::THREE_MONTHS);
             }
 
-            $shortKey = $shortKeyGenerator->generateUniqueToken(4, $urlRepository);
+            $shortKey = $tokenGenerator->generateUniqueToken(4, $urlRepository);
 
             $url->setShortKey($shortKey);
 
@@ -119,7 +119,13 @@ class UrlController extends AbstractController
     public function urlRedirect($key, UrlRepository $urlRepository): Response
     {
 
-        if (($url = $urlRepository->findOneBy(['shortKey' => $key]))) {
+        if ($url = $urlRepository->findOneBy(['shortKey' => $key])) {
+
+            if ($url->isExpired()) {
+                $this->addFlash('warning', 'messages.url_expired');
+                throw $this->createNotFoundException();
+            }
+
             //301 redirect is apparently healthiest for SEO
             //source: https://blog.rebrandly.com/301-redirect/
             return $this->redirect($url->getLongUrl(), '301');
