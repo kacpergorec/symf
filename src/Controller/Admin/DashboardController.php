@@ -34,6 +34,7 @@ class DashboardController extends AbstractDashboardController
     {
         return Dashboard::new()
             ->setTitle("<img alt='logo' height='40' src='{$this->urlHelper->getAbsoluteUrl('assets/images/logo/symf-logo.webp')}'>")
+            ->setFaviconPath("{$this->urlHelper->getAbsoluteUrl('assets/images/logo/favicon.ico')}")
             ->disableDarkMode()
             ;
     }
