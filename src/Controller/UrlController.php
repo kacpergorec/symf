@@ -49,7 +49,7 @@ class UrlController extends AbstractController
 
             if ($user) {
                 $url->setUser($user);
-                $url->updateExpirationDate(Url::ONE_MONTH);
+                $url->updateExpirationDate(Url::THREE_MONTHS);
             }
 
             $shortKey = $shortKeyGenerator->generateUniqueToken(4, $urlRepository);

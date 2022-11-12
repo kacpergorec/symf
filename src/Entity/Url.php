@@ -40,12 +40,12 @@ class Url
     const THREE_MONTHS = 'P3M';
     const ONE_MONTH = 'P1M';
     const ONE_WEEK = 'P1M';
-    const ONE_MINUTE = 'PT1M';
+    const ONE_MINUTE = 'PT0M5S';
 
     public function __construct()
     {
         $this->setCreatedAt(new DateTimeImmutable());
-        $this->updateExpirationDate(self::ONE_WEEK);
+        $this->updateExpirationDate(self::ONE_MINUTE);
     }
 
     public function updateExpirationDate($duration): self

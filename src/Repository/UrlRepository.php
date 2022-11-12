@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Url;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -39,4 +41,26 @@ class UrlRepository extends ServiceEntityRepository
         }
     }
 
+    public function countExpired(): int
+    {
+        return $this->getAllExpiredQueryBuilder()
+            ->select('COUNT(u.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function deleteExpired()
+    {
+        return $this->getAllExpiredQueryBuilder()
+            ->delete()
+            ->getQuery()
+            ->execute();
+    }
+
+    private function getAllExpiredQueryBuilder(): QueryBuilder
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.expirationDate < :now')
+            ->setParameter('now', new DateTime());
+    }
 }
