@@ -41,7 +41,8 @@ To send emails, run the worker using `symfony console messenger:consume async`
 Expired URLS should be cleaned by a CRON task using the command `symf:cleanup:urls`
 
 ## Presentation
-[TODO]
+
+![Symf presentation GIF](https://drive.google.com/uc?export=view&id=1G2NvIQLyfpaHHAq-7wFyucgXtFHbNruE)
 
 ## Contributing
 If you would like to contribute to this project, please fork the repository and create a pull request. I am always happy to receive contributions and feedback!
