@@ -107,7 +107,7 @@ class UrlController extends AbstractController
         $user = $security->getUser();
 
         if ($user && ($url = $urlRepository->find($id)) && $url->validateUser($user)) {
-            $url->updateExpirationDate(Url::ONE_MONTH);
+            $url->updateExpirationDate(Url::THREE_MONTHS);
             $urlRepository->save($url, true);
             $this->addFlash('success', 'url.refreshed');
         }
